@@ -1,0 +1,22 @@
+{
+  "words": [
+    {
+      "word_title": "Schmetterlig",
+      "word_description": "Butterfly",
+      "word_examples": "Ein Mensch, ein Schmetterling.",
+      "word_type": [
+        "Noun"
+      ],
+      "id": 5
+    },
+    {
+      "word_title": "Hund",
+      "word_description": "Dog",
+      "word_examples": "Ich mag Hunde.",
+      "word_type": [
+        "Noun"
+      ],
+      "id": 6
+    }
+  ]
+}
