@@ -42,7 +42,7 @@ export default function BotaoExcluir(props) {
                     <Button onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button onClick={() => {props.funcao(props.chave)}} color="secondary" autoFocus>
+                    <Button onClick={() => {props.funcao(props.chave)}} autoFocus>
                         Delete
                     </Button>
                 </DialogActions>

@@ -104,7 +104,7 @@ function FormWord() {
     }    
 
     return( <>
-                <h1>{wordOnLoad.id == null ? "Novo Word" : "Editar Word"}</h1>
+                <h1>{wordOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}</h1>
 
                 <Grid className={classes.root}>
                 <form onSubmit={handleSubmit(onSubmit)} className={classes.form}  noValidate autoComplete="off" >
@@ -119,6 +119,7 @@ function FormWord() {
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
                         size="small"
+                        color="secondary"
                     />
                     <br/>
                     <TextField 
@@ -133,6 +134,7 @@ function FormWord() {
                         variant="outlined"
                         multiline
                         rows={3}
+                        color="secondary"
                     />
                     <br/>    
                     <TextField 
@@ -147,6 +149,7 @@ function FormWord() {
                         variant="outlined"
                         multiline
                         rows={3}
+                        color="secondary"
                     />
                     <br/>
                     <FormControl 
@@ -167,6 +170,7 @@ function FormWord() {
                                         label="Word Type"
                                         style = {{width: 250}}
                                         InputLabelProps={{ shrink: true }}
+                                        color="secondary"
                                         SelectProps={{
                                             multiple: true,
                                             value: value,
@@ -191,7 +195,7 @@ function FormWord() {
                     </FormControl>
                     <br/><br/>
                     <Grid className={classes.buttons}> 
-                        <Button type="submit" id="salva_word" name="btn_salvar_word" size="small" variant="contained" color="primary">Save</Button>
+                        <Button type="submit" id="salva_word" name="btn_salvar_word" size="small" variant="contained" color="secondary">Save</Button>
                         <Button type="submit" id="cancela_word" name="cancela_word" size="small" variant="contained" onClick={() => { history.push('/words') }}>Cancel</Button>                  
                     </Grid>
                 </form>

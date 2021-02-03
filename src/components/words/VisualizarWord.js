@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
     paper: {
-      padding: theme.spacing(1),
+      padding: theme.spacing(2),
       textAlign: 'center',
       color: theme.palette.text.primary,
     },
@@ -67,9 +67,14 @@ const useStyles = makeStyles((theme) => ({
             <div className={classes.root}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Paper className={classes.paper}><b>{wordOnLoad.word_title}</b></Paper>
-                        <Paper className={classes.paper}>{wordOnLoad.word_description}</Paper>
-                        <Paper className={classes.examples}><em>{wordOnLoad.word_examples}</em></Paper>
+                        <Paper className={classes.paper}>
+                          <b>{wordOnLoad.word_title}</b>
+                          <hr/>
+                          {wordOnLoad.word_description}
+                          <br/><br/>
+                          <em className={classes.examples}>{wordOnLoad.word_examples}</em>
+                          <br/><br/>
+                        </Paper>
                     </Grid>
                 </Grid>
             </div>       

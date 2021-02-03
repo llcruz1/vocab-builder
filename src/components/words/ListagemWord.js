@@ -59,7 +59,7 @@ function ListagemWord() {
               <Box display="flex" justifyContent="flex-end">
                 <Box>
                   <Tooltip title="Add vocabulary" aria-label="add">
-                    <IconButton component={Link} to="/words/novo" id="novo_word" name="btn_novo_word"><AddCircleIcon color='primary' style={{fontSize: 50}}/></IconButton>
+                    <IconButton component={Link} to="/words/novo" id="novo_word" name="btn_novo_word"><AddCircleIcon color='secondary' style={{fontSize: 50}}/></IconButton>
                   </Tooltip>
                 </Box>
               </Box>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {store} from './Store';
 import {Provider} from 'react-redux'
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,24 +17,39 @@ import {
   Route,
 } from "react-router-dom";
 
-import {deepPurple} from '@material-ui/core/colors';
-
-let theme = createMuiTheme({
- 
-  palette: {
-    primary: {
-      main: deepPurple[900],
-    },
-    secondary: {
-      main: deepPurple[800],
-    },
-  },
-});
-
-theme = responsiveFontSizes(theme);
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import {grey, deepPurple} from '@material-ui/core/colors';
 
 
 const App = (props) => {
+
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const [darkState, setDarkState] = useState(prefersDarkMode);
+
+  const palletType = darkState ? "dark" : "light";
+  const mainPrimaryColor = darkState ? grey[800] : deepPurple[600];
+  const mainSecondaryColor = darkState ? deepPurple[600] : deepPurple[600];
+
+  const theme = React.useMemo(() => responsiveFontSizes(createMuiTheme({
+    palette: {
+      type: palletType,
+      primary: {
+        main: mainPrimaryColor
+      },
+      secondary: {
+        main: mainSecondaryColor
+      },
+    },
+  })), [palletType, mainPrimaryColor, mainSecondaryColor]);
+
+  useEffect(() => setDarkState(prefersDarkMode), [prefersDarkMode]);
+
+  const handleThemeChange = () => {
+    setDarkState(!darkState);
+  };
+  
+  //theme = responsiveFontSizes(theme);
   //estado do drawer
   const [drawerOpen, setDrawerOpen] = useState(false);
   //handler de abrir e fechar o drawer
@@ -44,12 +59,14 @@ const App = (props) => {
     }
     setDrawerOpen(open);
   };
+
+
   return( <>
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Provider store={store}>                
                 <Router>    
-                    <AppBar toggleDrawerHandler={toggleDrawerHandler} />
+                    <AppBar handleThemeChange={handleThemeChange} darkState={darkState} toggleDrawerHandler={toggleDrawerHandler} />
                     <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
                     <Container maxWidth="xl">
                       <div>

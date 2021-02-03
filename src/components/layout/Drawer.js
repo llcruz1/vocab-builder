@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import MUIDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -7,31 +6,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import ListIcon from '@material-ui/icons/List';
 import {Link} from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
-    },
-    nested: {
-      paddingLeft: theme.spacing(4),
-    },
-  }));
 
 export default function Drawer(props){
-
-    const classes = useStyles();
-    const [open, setOpen] = useState(true);
-
-    const handleClick = () => {
-        setOpen(!open);
-    };
-
 
     return(
         <MUIDrawer anchor="left" open={props.open} 
@@ -39,17 +19,13 @@ export default function Drawer(props){
             onClose={props.toggleDrawerHandler(false)} >
             <Box width={250}>
                 <List>
-                    <ListItem key="Profile">
-                    <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-                        <ListItemText primary="Profile"/>
+                <ListItem button key="Decks" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
+                        <ListItemIcon><ListIcon /></ListItemIcon>
+                        <ListItemText primary="Decks" />
                     </ListItem>
                 </List>
                 <Divider/>
                 <List>
-                    <ListItem button key="Decks" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
-                        <ListItemIcon><ListIcon /></ListItemIcon>
-                        <ListItemText primary="Decks" />
-                    </ListItem>
                     <ListItem button key="Browse" onClick={props.toggleDrawerHandler(false)} component={Link} to="/partidas/novo">
                         <ListItemIcon><SearchIcon /></ListItemIcon>
                         <ListItemText primary="Browse" />
