@@ -26,7 +26,7 @@ import LinhaWord from './LinhaWord';
         </Box>
     );
   }else{
-    return(<div>Não existem words a serem exibidos.</div>)
+    return(<div>There are no items to be displayed.</div>)
   }
 }
 

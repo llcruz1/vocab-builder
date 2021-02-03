@@ -11,18 +11,17 @@ import {wordSchema} from './WordSchema';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      padding: theme.spacing(3),
+      padding: theme.spacing(2),
       flexGrow: 1,
       textAlign: 'center',
     },
     paper: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
       textAlign: 'center',
       color: theme.palette.text.primary,
     },
 
     examples: {
-      padding: theme.spacing(1),
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
@@ -68,10 +67,9 @@ const useStyles = makeStyles((theme) => ({
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                          <b>{wordOnLoad.word_title}</b>
+                          <h3>{wordOnLoad.word_title}</h3>
                           <hr/>
-                          {wordOnLoad.word_description}
-                          <br/><br/>
+                          <p>{wordOnLoad.word_description}</p>
                           <em className={classes.examples}>{wordOnLoad.word_examples}</em>
                           <br/><br/>
                         </Paper>

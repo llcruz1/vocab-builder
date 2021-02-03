@@ -1,22 +1,13 @@
 {
   "words": [
     {
-      "word_title": "Schmetterling",
-      "word_description": "Butterfly",
-      "word_examples": "Ein Mensch, ein Schmetterling.",
+      "word_title": "die Katze",
+      "word_description": "The cat.",
+      "word_examples": "Katzen und Hunde.",
       "word_type": [
         "Noun"
       ],
-      "id": 5
-    },
-    {
-      "word_title": "Hund",
-      "word_description": "Dog",
-      "word_examples": "Ich mag Hunde.",
-      "word_type": [
-        "Noun"
-      ],
-      "id": 6
+      "id": 1
     }
   ]
 }

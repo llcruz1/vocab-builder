@@ -6,35 +6,50 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import BotaoExcluir from '../layout/AlertDialog.js'
 
-/**
- * @module words/LinhaWord
- */
-
- /**
- * @typedef Word
- * @type {object}
- * @property {string} id - identificador.
- * @property {string} nome - nome do word.
-  */
-
- /**
-  * Renderiza uma linha na listagem de words. 
-  * Cada linha conterá o nome do word, juntamente com os botões para editar e excluir.
-  * @param {Word} props.word - Word a ser renderizado na linha.
-  */
 
 function LinhaWord(props) {
+
+  let listItemProps = {
+    divider: true,
+    button: true,
+    id: props.word.id,
+  }
 
   if(props != null && props.word != null && props.word.id != null){
       return(
         <>
-        <Divider/>
+        <ListItem {...listItemProps} component={Link} to = {`/words/visualizar/${props.word.id}`}>
+          <ListItemText
+              primary={props.word.word_title}
+          />
+          <ListItemSecondaryAction>
+            <Link to={`/words/${props.word.id}`}>
+                <Tooltip title="Update" aria-label="update">
+                  <IconButton id="edita_word" Link to={`/words/${props.word.id}`} >
+                    <EditIcon/>
+                  </IconButton>
+                </Tooltip>
+              </Link>
+              
+              <BotaoExcluir 
+                id="deleta_word" 
+                name="excluir_word"
+                msg="You're about to delete the selected vocabulary." 
+                funcao={props.onClickExcluirWord} 
+                chave={props.word.id}
+              />
+          </ListItemSecondaryAction>
+       </ListItem>
+
+
+       {/*} <Divider/>
           <ListItem>
             <ListItem>
-              <ListItem button component={Link} to = {`/words/visualizar/${props.word.id}`}>
+              <ListItem button >component={Link} to = {`/words/visualizar/${props.word.id}`}
                 <ListItemText primary={props.word.word_title}/>
               </ListItem>            
             </ListItem>
@@ -54,7 +69,7 @@ function LinhaWord(props) {
               funcao={props.onClickExcluirWord} 
               chave={props.word.id}
             />
-          </ListItem>
+      </ListItem>*/}
         </>
       );
   }else{
