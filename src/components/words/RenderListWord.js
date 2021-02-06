@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
 import Grid from '@material-ui/core/Grid';
@@ -17,6 +17,7 @@ import Zoom from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';
 
 import DeleteButton from '../layout/DeleteButton.js'
+import {VisualizeDialog} from './VisualizeWord';
 
 import {deleteWordServer, fetchWords, selectAllWords} from './WordsSlice'
 
@@ -42,12 +43,13 @@ function ItemWord(props) {
     divider: true,
     button: true,
     id: props.word.id,
+    onClick: () => props.setEditId(props.word.id)
   }
 
   if(props != null && props.word != null && props.word.id != null){
       return(
         <>
-        <ListItem {...listItemProps} component={Link} to = {`/words/visualize/${props.word.id}`}>
+        <ListItem {...listItemProps}>
           <ListItemText
               primary={props.word.word_title}
           />
@@ -91,8 +93,13 @@ function ListWords(props) {
     return(
         <Box justifyContent="flex-start">
           <List>
-            {props.words.map((word) =><ItemWord key={word.id} word={word} 
-                                    onClickExcluirWord={props.onClickExcluirWord}/>)}                      
+            {props.words.map((word) =>
+            <ItemWord 
+              key={word.id} 
+              word={word} 
+              onClickExcluirWord={props.onClickExcluirWord}
+              setEditId={props.setEditId}
+            />)}                      
           </List>
         </Box>
     );
@@ -116,9 +123,20 @@ function RenderListWord() {
     //const error = useSelector(state => state.words.error);
     const dispatch = useDispatch();
     const classes = useStyles();
+    const [openVisualizeDialog, setOpenVisualizeDialog] = useState(false);
+    const [editId, setEditId] = useState(0);
   
     function handleClickExcluirWord(id){
       dispatch(deleteWordServer(id));
+    }
+
+    function handleOpenVisualizeWord(idProjeto){
+      setEditId(idProjeto);
+      setOpenVisualizeDialog(true);
+    }
+
+    function handleCloseVisualizeWord(){
+        setOpenVisualizeDialog(false);
     }
   
     useEffect(() => {
@@ -132,7 +150,7 @@ function RenderListWord() {
   
     let listWords = '';
     if(status === 'loaded' || status === 'saved' || status === 'deleted'){
-      listWords = <ListWords words={words} onClickExcluirWord={handleClickExcluirWord} />;
+      listWords = <ListWords words={words} onClickExcluirWord={handleClickExcluirWord} setEditId={handleOpenVisualizeWord} />;
     }else if(status === 'loading'){
       listWords = <div>Loading...</div>;
     }else if(status === 'failed'){
@@ -151,6 +169,15 @@ function RenderListWord() {
                 </Box>
               </Box>
                 {listWords}
+
+                <VisualizeDialog 
+                    id={editId} 
+                    open={openVisualizeDialog}
+                    handleOpen={handleOpenVisualizeWord} 
+                    handleClose={handleCloseVisualizeWord} 
+                    title="View"
+                />
+
                 <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
                   <Tooltip title="Add vocabulary" aria-label="add">
                     <Fab component={Link} to="/words/novo" className={classes.fabButton} id="novo_word" name="btn_novo_word" color="secondary" aria-label="add">

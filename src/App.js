@@ -9,7 +9,7 @@ import Drawer from './components/layout/Drawer';
 
 import RenderListWord from './components/words/RenderListWord';
 import FormWord from './components/words/FormWord';
-import VisualizeWord from './components/words/VisualizeWord';
+import {VisualizeWord} from './components/words/VisualizeWord';
 
 import {
   BrowserRouter as Router,
