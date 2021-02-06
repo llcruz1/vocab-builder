@@ -3,18 +3,30 @@ import {Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+//import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import List from '@material-ui/core/List';
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Zoom from '@material-ui/core/Zoom';
+import { makeStyles } from '@material-ui/core/styles';
 
 import BotaoExcluir from '../layout/BotaoExcluir.js'
 
 import {deleteWordServer, fetchWords, selectAllWords} from './WordsSlice'
+
+const useStyles = makeStyles((theme) => ({
+  fabButton: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 3
+  },
+
+}));
 
 //----------------------------------Item-----------------------------------------------//
 function ItemWord(props) {
@@ -84,8 +96,8 @@ function RenderListWord() {
     const status = useSelector(state => state.words.status);
     const error = useSelector(state => state.words.error);
     const dispatch = useDispatch();
+    const classes = useStyles();
   
-      
     function handleClickExcluirWord(id){
       dispatch(deleteWordServer(id));
     }
@@ -115,15 +127,15 @@ function RenderListWord() {
                   <div id="lbl_titulo_pagina"><h1>Your vocabulary</h1></div>
                 </Box>
               </Box>
-  
-              <Box display="flex" justifyContent="flex-end">
-                <Box>
-                  <Tooltip title="Add vocabulary" aria-label="add">
-                    <IconButton component={Link} to="/words/novo" id="novo_word" name="btn_novo_word"><AddCircleIcon color='secondary' style={{fontSize: 50}}/></IconButton>
-                  </Tooltip>
-                </Box>
-              </Box>
               {listWords}
+
+                <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
+                  <Tooltip title="Add vocabulary" aria-label="add">
+                    <Fab component={Link} to="/words/novo" className={classes.fabButton} id="novo_word" name="btn_novo_word" color="secondary" aria-label="add">
+                        <AddIcon />
+                    </Fab>
+                  </Tooltip>
+                </Zoom>
             </div>
             </>
     );
