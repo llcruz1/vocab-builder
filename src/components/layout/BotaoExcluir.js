@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 
 export default function BotaoExcluir(props) {
-
+ 
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -42,7 +42,7 @@ export default function BotaoExcluir(props) {
                     <Button onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button onClick={() => {props.funcao(props.chave)}} autoFocus>
+                    <Button onClick={() => {props.funcao(props.chave)}} autoFocus color="secondary">
                         Delete
                     </Button>
                 </DialogActions>

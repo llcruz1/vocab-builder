@@ -7,7 +7,7 @@ import Container from '@material-ui/core/Container';
 import AppBar from './components/layout/AppBar';
 import Drawer from './components/layout/Drawer';
 
-import ListagemWords from './components/words/ListagemWord';
+import RenderListWord from './components/words/RenderListWord';
 import FormWord from './components/words/FormWord';
 import VisualizarWord from './components/words/VisualizarWord';
 
@@ -71,11 +71,11 @@ const App = (props) => {
                     <Container maxWidth="xl">
                       <div>
                         <Switch>
-                          <Route exact path="/"><ListagemWords/></Route>
+                          <Route exact path="/"><RenderListWord/></Route>
                           <Route exact path="/words/novo"><FormWord/></Route>
                           <Route exact path="/words/:id"><FormWord/></Route>
                           <Route exact path="/words/visualizar/:id"><VisualizarWord/></Route>
-                          <Route exact path="/words"><ListagemWords/></Route>             
+                          <Route exact path="/words"><RenderListWord/></Route>             
                         </Switch>
                       </div>
                     </Container>

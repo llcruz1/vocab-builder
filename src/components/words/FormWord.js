@@ -12,6 +12,12 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
+import Dialog from '@material-ui/core/Dialog';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Typography from '@material-ui/core/Typography';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
@@ -52,7 +58,11 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontWeight: 550,
       },
-  }
+  },
+
+  appBar: {
+    position: 'relative',
+  },
 
 }));
 
@@ -104,6 +114,7 @@ function FormWord() {
     }    
 
     return( <>
+    
                 <h1>{wordOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}</h1>
 
                 <Grid className={classes.root}>

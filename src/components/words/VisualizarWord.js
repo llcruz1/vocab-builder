@@ -69,6 +69,12 @@ const useStyles = makeStyles((theme) => ({
                         <Paper className={classes.paper}>
                           <h3>{wordOnLoad.word_title}</h3>
                           <hr/>
+                          {wordOnLoad.word_type.map((type) => (
+                            <div>
+                                {type}
+                                <br/>
+                            </div>
+                        ))}
                           <p>{wordOnLoad.word_description}</p>
                           <em className={classes.examples}>{wordOnLoad.word_examples}</em>
                           <br/><br/>
