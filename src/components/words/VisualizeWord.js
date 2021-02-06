@@ -35,24 +35,7 @@ const useStyles = makeStyles((theme) => ({
   
   }));
 
-
-/**
- * @module words/VisualizarWord
- */
-
- /**
- * @typedef Word
- * @type {object}
- * @property {string} id - identificador.
- * @property {string} nome - nome do word.
- * @property {date} data_nascimento - data de nascimento do word.
-   */
-
- /**
-  * Renderiza a tela com os dados do word selecionado na linha.
- */
-
- function VisualizarWord() {
+ function VisualizeWord() {
     let { id } = useParams();
  
     const wordFound = useSelector(state => selectWordsById(state, id))
@@ -86,4 +69,4 @@ const useStyles = makeStyles((theme) => ({
     );
 }
 
-export default VisualizarWord;
+export default VisualizeWord;

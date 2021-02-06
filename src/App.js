@@ -9,7 +9,7 @@ import Drawer from './components/layout/Drawer';
 
 import RenderListWord from './components/words/RenderListWord';
 import FormWord from './components/words/FormWord';
-import VisualizarWord from './components/words/VisualizarWord';
+import VisualizeWord from './components/words/VisualizeWord';
 
 import {
   BrowserRouter as Router,
@@ -74,7 +74,7 @@ const App = (props) => {
                           <Route exact path="/"><RenderListWord/></Route>
                           <Route exact path="/words/novo"><FormWord/></Route>
                           <Route exact path="/words/:id"><FormWord/></Route>
-                          <Route exact path="/words/visualizar/:id"><VisualizarWord/></Route>
+                          <Route exact path="/words/visualize/:id"><VisualizeWord/></Route>
                           <Route exact path="/words"><RenderListWord/></Route>             
                         </Switch>
                       </div>

@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
+import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 //import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -15,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Zoom from '@material-ui/core/Zoom';
 import { makeStyles } from '@material-ui/core/styles';
 
-import BotaoExcluir from '../layout/BotaoExcluir.js'
+import DeleteButton from '../layout/DeleteButton.js'
 
 import {deleteWordServer, fetchWords, selectAllWords} from './WordsSlice'
 
@@ -26,10 +27,16 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing.unit * 3
   },
 
+  messages: {
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }
 }));
 
 //----------------------------------Item-----------------------------------------------//
 function ItemWord(props) {
+
+  const classes = useStyles();
 
   let listItemProps = {
     divider: true,
@@ -40,7 +47,7 @@ function ItemWord(props) {
   if(props != null && props.word != null && props.word.id != null){
       return(
         <>
-        <ListItem {...listItemProps} component={Link} to = {`/words/visualizar/${props.word.id}`}>
+        <ListItem {...listItemProps} component={Link} to = {`/words/visualize/${props.word.id}`}>
           <ListItemText
               primary={props.word.word_title}
           />
@@ -53,7 +60,7 @@ function ItemWord(props) {
                 </Tooltip>
               </Link>
               
-              <BotaoExcluir 
+              <DeleteButton
                 id="deleta_word" 
                 name="excluir_word"
                 msg="You're about to delete the selected vocabulary." 
@@ -66,13 +73,20 @@ function ItemWord(props) {
         </>
       );
   }else{
-    return(<tr><td colSpan={3}>It wasn't possible to display the vocabulary list.</td></tr>)
+    return(
+      <div className={classes.messages}>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        Can't display the vocabulary list.
+      </div>)
   }
 }
 //--------------------------------------------------------------------------------------------//
 
 //--------------------------------------List-----------------------------------------------//
 function ListWords(props) {
+
+  const classes = useStyles();
+
   if(props != null && props.words != null && props.words.length > 0){
     return(
         <Box justifyContent="flex-start">
@@ -83,7 +97,12 @@ function ListWords(props) {
         </Box>
     );
   }else{
-    return(<div>There are no items to be displayed.</div>)
+    return(
+      <div className={classes.messages}>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        Vocabulary list is empty.
+      </div>
+    )
   }
 }
 //------------------------------------------------------------------------------------//
@@ -94,7 +113,7 @@ function RenderListWord() {
 
     const words = useSelector(selectAllWords)
     const status = useSelector(state => state.words.status);
-    const error = useSelector(state => state.words.error);
+    //const error = useSelector(state => state.words.error);
     const dispatch = useDispatch();
     const classes = useStyles();
   
@@ -117,7 +136,11 @@ function RenderListWord() {
     }else if(status === 'loading'){
       listWords = <div>Loading...</div>;
     }else if(status === 'failed'){
-      listWords = <div>Error: {error}</div>;
+      listWords = 
+        <div className={classes.messages}>
+          <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+          Can't load content.
+        </div>;
     }
   
     return( <>
@@ -127,8 +150,7 @@ function RenderListWord() {
                   <div id="lbl_titulo_pagina"><h1>Your vocabulary</h1></div>
                 </Box>
               </Box>
-              {listWords}
-
+                {listWords}
                 <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
                   <Tooltip title="Add vocabulary" aria-label="add">
                     <Fab component={Link} to="/words/novo" className={classes.fabButton} id="novo_word" name="btn_novo_word" color="secondary" aria-label="add">
