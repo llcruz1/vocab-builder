@@ -8,7 +8,7 @@ import AppBar from './components/layout/AppBar';
 import Drawer from './components/layout/Drawer';
 
 import RenderListWord from './components/words/RenderListWord';
-import FormWord from './components/words/FormWord';
+import {FormWord} from './components/words/FormWord';
 import {VisualizeWord} from './components/words/VisualizeWord';
 
 import {
@@ -72,8 +72,8 @@ const App = (props) => {
                       <div>
                         <Switch>
                           <Route exact path="/"><RenderListWord/></Route>
-                          <Route exact path="/words/novo"><FormWord/></Route>
-                          <Route exact path="/words/:id"><FormWord/></Route>
+                          <Route exact path="/words/novo"><FormWord fromMenu={true}/></Route>
+                          <Route exact path="/words/:id"><FormWord fromMenu={true}/></Route>
                           <Route exact path="/words/visualize/:id"><VisualizeWord/></Route>
                           <Route exact path="/words"><RenderListWord/></Route>             
                         </Switch>

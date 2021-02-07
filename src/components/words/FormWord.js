@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useParams, useHistory } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,12 +12,13 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
-/*import Dialog from '@material-ui/core/Dialog';
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Typography from '@material-ui/core/Typography';*/
+import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import DoneIcon from '@material-ui/icons/Done';
 import Zoom from '@material-ui/core/Zoom';
@@ -64,16 +65,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
 
-  buttons: {
-    '& > *': {
-        margin: theme.spacing(1),
-        textAlign: 'center',
-        fontWeight: 550,
-      },
-  },
-
   appBar: {
     position: 'relative',
+  },
+
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+    fontWeight: 550,
   },
 
   fabButton: {
@@ -84,8 +83,35 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+  
+  
+function FormDialog(props){
+const classes = useStyles();
+return (
+    <div>
+    <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
+        <AppBar className={classes.appBar}>
+        <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={props.handleClose} aria-label="close">
+            <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+                {props.id === 0 ? "New" : "Edit"}
+            </Typography>
+        </Toolbar>
+        </AppBar>
+        <FormWord {...props} />
+    </Dialog>
+    </div>
+);
 
-function FormWord() {
+}
+
+
+function FormWord(props) {
 
     const word_types = [
         'Noun',
@@ -101,17 +127,20 @@ function FormWord() {
         'Phrasal Verb',
       ];
     
-    //inicializa o estado com o hook useState
     const history  = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles(); 
 
     let { id } = useParams();
+    id = props.id ? props.id : id;
+  
 
     const wordFound = useSelector(state => selectWordsById(state, id))
     const { register, handleSubmit, errors, control } = useForm({
         resolver: yupResolver(wordSchema)
     });
+
+    id = parseInt(id);
 
     const [wordOnLoad] = useState(
         id ? wordFound ?? wordSchema.cast({}): wordSchema.cast({}));
@@ -125,16 +154,20 @@ function FormWord() {
     function onSubmit(word){
         if(actionType === 'words/addWord'){
             dispatch(addWordServer(word));
-        }else{
+        }
+        else if(actionType === 'words/updateWord'){
             dispatch(updateWordServer({...word, id: wordFound.id}));
+        }
+        if(!props.fromMenu){
+            props.handleClose();
         }
         
         history.push('/words');
-    }    
+    } 
 
     return( <>
     
-                <h1>{wordOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}</h1>
+                <h1> {/*{wordOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}*/} </h1>
 
                 <Grid className={classes.root}>
                 <form onSubmit={handleSubmit(onSubmit)} className={classes.form}  noValidate autoComplete="off" >
@@ -151,6 +184,7 @@ function FormWord() {
                         variant="outlined"
                         size="small"
                         color="secondary"
+                        required
                     />
                     <br/>
                     <TextField 
@@ -185,11 +219,12 @@ function FormWord() {
                         color="secondary"
                     />
                     <br/>
+
                     <FormControl 
                         className={classes.formControl}
                         error={Boolean(errors.word_type)}
                     >
-                        {/*<InputLabel>Jogadores</InputLabel>*/}
+                      
                         <br/>
                         <Controller
                             control={control}
@@ -198,7 +233,6 @@ function FormWord() {
                             render={({ onChange, value }) => {
                                 return (
                                     <TextField
-                                        //classes={classes.formControl}
                                         select
                                         label="Word Type"
                                         style = {{width: 250}}
@@ -234,11 +268,6 @@ function FormWord() {
                             </Fab>
                         </Tooltip>
                     </Zoom>
-
-                    {/*<Grid className={classes.buttons}> 
-                        <Button type="submit" id="salva_word" name="btn_salvar_word" size="small" variant="contained" color="secondary">Save</Button>
-                        <Button type="submit" id="cancela_word" name="cancela_word" size="small" variant="contained" onClick={() => { history.push('/words') }}>Cancel</Button>               
-                        </Grid>*/}
                 </form>
  
                 </Grid>
@@ -246,4 +275,4 @@ function FormWord() {
         );
 }
 
-export default FormWord
+export {FormWord, FormDialog}

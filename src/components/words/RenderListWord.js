@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import DeleteButton from '../layout/DeleteButton.js'
 import {VisualizeDialog} from './VisualizeWord';
+import {FormDialog} from './FormWord';
 
 import {deleteWordServer, fetchWords, selectAllWords} from './WordsSlice'
 
@@ -43,7 +44,8 @@ function ItemWord(props) {
     divider: true,
     button: true,
     id: props.word.id,
-    onClick: () => props.setEditId(props.word.id)
+    onClick: () => props.setVisualizeId(props.word.id)
+  
   }
 
   if(props != null && props.word != null && props.word.id != null){
@@ -53,14 +55,12 @@ function ItemWord(props) {
           <ListItemText
               primary={props.word.word_title}
           />
-          <ListItemSecondaryAction>
-            <Link to={`/words/${props.word.id}`}>
+           <ListItemSecondaryAction>
                 <Tooltip title="Update" aria-label="update">
-                  <IconButton id="edita_word" Link to={`/words/${props.word.id}`} >
+                  <IconButton id="edita_word" onClick = {() => props.setEditId(props.word.id)} >
                     <EditIcon/>
                   </IconButton>
                 </Tooltip>
-              </Link>
               
               <DeleteButton
                 id="deleta_word" 
@@ -98,6 +98,7 @@ function ListWords(props) {
               key={word.id} 
               word={word} 
               onClickExcluirWord={props.onClickExcluirWord}
+              setVisualizeId={props.setVisualizeId}
               setEditId={props.setEditId}
             />)}                      
           </List>
@@ -124,19 +125,33 @@ function RenderListWord() {
     const dispatch = useDispatch();
     const classes = useStyles();
     const [openVisualizeDialog, setOpenVisualizeDialog] = useState(false);
+    const [openFormDialog, setOpenFormDialog] = useState(false);
     const [editId, setEditId] = useState(0);
+    const [visualizeId, setVisualizeId] = useState(0);
   
     function handleClickExcluirWord(id){
       dispatch(deleteWordServer(id));
     }
 
-    function handleOpenVisualizeWord(idProjeto){
-      setEditId(idProjeto);
+    function handleOpenVisualizeWord(idWord){
+      setVisualizeId(idWord);
       setOpenVisualizeDialog(true);
     }
 
     function handleCloseVisualizeWord(){
         setOpenVisualizeDialog(false);
+    }
+
+    function handleOpenFormWord(idWord){
+      if (typeof(idWord) != 'number') {      
+        idWord=0; // When clicking on Add button, idWord value is "Object object"
+      }
+      setEditId(idWord);
+      setOpenFormDialog(true);
+    }
+
+    function handleCloseFormWord(){
+        setOpenFormDialog(false);
     }
   
     useEffect(() => {
@@ -150,7 +165,13 @@ function RenderListWord() {
   
     let listWords = '';
     if(status === 'loaded' || status === 'saved' || status === 'deleted'){
-      listWords = <ListWords words={words} onClickExcluirWord={handleClickExcluirWord} setEditId={handleOpenVisualizeWord} />;
+      listWords = 
+        <ListWords 
+          words={words} 
+          onClickExcluirWord={handleClickExcluirWord} 
+          setVisualizeId={handleOpenVisualizeWord} 
+          setEditId={handleOpenFormWord} 
+        />;
     }else if(status === 'loading'){
       listWords = <div>Loading...</div>;
     }else if(status === 'failed'){
@@ -171,16 +192,24 @@ function RenderListWord() {
                 {listWords}
 
                 <VisualizeDialog 
-                    id={editId} 
+                    id={visualizeId} 
                     open={openVisualizeDialog}
                     handleOpen={handleOpenVisualizeWord} 
                     handleClose={handleCloseVisualizeWord} 
                     title="View"
                 />
 
+                <FormDialog 
+                    id={editId} 
+                    open={openFormDialog}
+                    handleOpen={handleOpenFormWord} 
+                    handleClose={handleCloseFormWord} 
+                    //title={editId == null ? "New" : "Edit"}
+                />
+
                 <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
                   <Tooltip title="Add vocabulary" aria-label="add">
-                    <Fab component={Link} to="/words/novo" className={classes.fabButton} id="novo_word" name="btn_novo_word" color="secondary" aria-label="add">
+                    <Fab onClick={handleOpenFormWord} className={classes.fabButton} id="novo_word" name="btn_novo_word" color="secondary" aria-label="add">
                         <AddIcon />
                     </Fab>
                   </Tooltip>
