@@ -56,7 +56,7 @@ function ItemWord(props) {
               primary={props.word.word_title}
           />
            <ListItemSecondaryAction>
-                <Tooltip title="Update" aria-label="update">
+                <Tooltip title="Edit" aria-label="Edit">
                   <IconButton id="edita_word" onClick = {() => props.setEditId(props.word.id)} >
                     <EditIcon/>
                   </IconButton>
@@ -204,7 +204,7 @@ function RenderListWord() {
                     open={openFormDialog}
                     handleOpen={handleOpenFormWord} 
                     handleClose={handleCloseFormWord} 
-                    //title={editId == null ? "New" : "Edit"}
+                    title={editId === 0 ? "Add Word" : "Edit Word"}
                 />
 
                 <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>

@@ -96,10 +96,10 @@ return (
         <AppBar className={classes.appBar}>
         <Toolbar>
             <IconButton edge="start" color="inherit" onClick={props.handleClose} aria-label="close">
-            <ArrowBackIcon />
+                <ArrowBackIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-                {props.id === 0 ? "New" : "Edit"}
+                {props.title}
             </Typography>
         </Toolbar>
         </AppBar>
