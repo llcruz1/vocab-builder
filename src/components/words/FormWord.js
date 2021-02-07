@@ -12,12 +12,16 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
-import Dialog from '@material-ui/core/Dialog';
+/*import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';*/
+import Fab from '@material-ui/core/Fab';
+import DoneIcon from '@material-ui/icons/Done';
+import Zoom from '@material-ui/core/Zoom';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
@@ -27,27 +31,35 @@ const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
-          },
+            },
         textAlign: 'center'
     },
  
   form: {
     '& > *': {
         margin: theme.spacing(1),
-        minWidth: 500,
-
-        [theme.breakpoints.down('md')]: {
-            minWidth: 300,
-        },
     },
   },
+
+  formFields: {
+    [theme.breakpoints.up('lg')]: {
+        minWidth: "50%",
+    },
+
+    [theme.breakpoints.down('md')]: {
+        minWidth: "95%",
+    },
+  },
+  
   chips: {
     display: 'flex',
     flexWrap: 'wrap',
   },
+  
   chip: {
     margin: 2,
   },
+
   formControl: {
     margin: theme.spacing(2),
   },
@@ -62,6 +74,12 @@ const useStyles = makeStyles((theme) => ({
 
   appBar: {
     position: 'relative',
+  },
+
+  fabButton: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 3
   },
 
 }));
@@ -80,6 +98,7 @@ function FormWord() {
         'Interjection',
         'Expression',
         'Slang',
+        'Phrasal Verb',
       ];
     
     //inicializa o estado com o hook useState
@@ -120,6 +139,7 @@ function FormWord() {
                 <Grid className={classes.root}>
                 <form onSubmit={handleSubmit(onSubmit)} className={classes.form}  noValidate autoComplete="off" >
                     <TextField 
+                        className={classes.formFields}
                         id="word_title" 
                         label="Word" 
                         name="word_title" 
@@ -134,6 +154,7 @@ function FormWord() {
                     />
                     <br/>
                     <TextField 
+                        className={classes.formFields}
                         id="word_description" 
                         label="Description" 
                         name="word_description" 
@@ -149,6 +170,7 @@ function FormWord() {
                     />
                     <br/>    
                     <TextField 
+                        className={classes.formFields}
                         id="word_examples" 
                         label="Examples" 
                         name="word_examples" 
@@ -204,11 +226,19 @@ function FormWord() {
                             }}
                         />
                     </FormControl>
-                    <br/><br/>
-                    <Grid className={classes.buttons}> 
+
+                    <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
+                        <Tooltip title="Save" aria-label="save">
+                            <Fab type="submit" className={classes.fabButton} id="salva_word" name="btn_salvar_word" color="secondary" aria-label="save">
+                                <DoneIcon />
+                            </Fab>
+                        </Tooltip>
+                    </Zoom>
+
+                    {/*<Grid className={classes.buttons}> 
                         <Button type="submit" id="salva_word" name="btn_salvar_word" size="small" variant="contained" color="secondary">Save</Button>
-                        <Button type="submit" id="cancela_word" name="cancela_word" size="small" variant="contained" onClick={() => { history.push('/words') }}>Cancel</Button>                  
-                    </Grid>
+                        <Button type="submit" id="cancela_word" name="cancela_word" size="small" variant="contained" onClick={() => { history.push('/words') }}>Cancel</Button>               
+                        </Grid>*/}
                 </form>
  
                 </Grid>
