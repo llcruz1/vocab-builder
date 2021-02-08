@@ -12,12 +12,19 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import TranslateIcon from '@material-ui/icons/Translate';
-import { ListItemSecondaryAction } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const useStyles = makeStyles((theme) => ({
-appBar: {
-    position: 'relative',
+
+  root: {
+    margin: theme.spacing(2),
   },
+
+  appBar: {
+      position: 'relative',
+  },
+
   title: {
     marginLeft: theme.spacing(2),
     flex: 1,
@@ -54,10 +61,13 @@ function SettingsDialog(props){
 }
 
  function Settings(){
+
+  const classes = useStyles();
+
     return(
         <>
             <h1> </h1>
-            <List>
+            <List className={classes.root}>
                 <ListItem>
                     <ListItemIcon>
                         <TranslateIcon/>
@@ -70,6 +80,7 @@ function SettingsDialog(props){
                         </ListItemText>
                     </ListItemSecondaryAction>
                 </ListItem>
+                <Divider/>
 
             </List>
 

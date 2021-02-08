@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useParams, useHistory } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller} from "react-hook-form";
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -12,7 +11,12 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -83,19 +87,52 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
   
   
 function FormDialog(props){
+    const [openExitDialog, setOpenExitDialog] = useState(false);
+
+    const handleOpenExitDialog = () => {
+        setOpenExitDialog(true);
+    };
+    
+    const handleCloseExitDialog = () => {
+        setOpenExitDialog(false);
+    };  
+
 const classes = useStyles();
+
 return (
     <div>
+    {/*---------------------------------------Confirm Exit Dialog-------------------------------*/}
+    <Dialog open={openExitDialog} onClose={handleCloseExitDialog}>
+        <DialogTitle id="alert-dialog-title">
+            Sure you want to lose the current input?
+        </DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    If you have unsaved changes, they will be lost.
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseExitDialog}>
+                    No
+                </Button>
+                <Button onClick={()=>{props.handleClose();handleCloseExitDialog()}} autoFocus color="secondary">
+                    Yes
+                </Button>
+            </DialogActions>
+    </Dialog>
+    {/*-----------------------------------------------------------------------------------------*/}
+    
     <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
         <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={props.handleClose} aria-label="close">
+            <IconButton edge="start" color="inherit" onClick={handleOpenExitDialog} aria-label="close">
                 <ArrowBackIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
@@ -163,10 +200,10 @@ function FormWord(props) {
         }
         
         history.push('/words');
-    } 
-
-    return( <>
+    }
     
+
+    return( <>  
                 <h1> {/*{wordOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}*/} </h1>
 
                 <Grid className={classes.root}>

@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
-//import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItem from '@material-ui/core/ListItem';
@@ -121,7 +118,6 @@ function RenderListWord() {
 
     const words = useSelector(selectAllWords)
     const status = useSelector(state => state.words.status);
-    //const error = useSelector(state => state.words.error);
     const dispatch = useDispatch();
     const classes = useStyles();
     const [openVisualizeDialog, setOpenVisualizeDialog] = useState(false);
@@ -173,7 +169,11 @@ function RenderListWord() {
           setEditId={handleOpenFormWord} 
         />;
     }else if(status === 'loading'){
-      listWords = <div>Loading...</div>;
+      listWords =
+        <div className={classes.messages}>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            Loading...
+        </div>;
     }else if(status === 'failed'){
       listWords = 
         <div className={classes.messages}>

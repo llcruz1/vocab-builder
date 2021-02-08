@@ -31,13 +31,13 @@ export default function Drawer(props){
             onClose={props.toggleDrawerHandler(false)} >
             <Box width={250}>
                 <List>
-                <ListItem button key="Languages" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
-                        <ListItemIcon><ListIcon /></ListItemIcon>
+                    <ListItem button key="Languages" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
+                        <ListItemIcon>
+                            <ListIcon />
+                        </ListItemIcon>
                         <ListItemText primary="Languages" />
                     </ListItem>
-                </List>
-
-                <List>
+    
                     <ListItem button key="Browse" onClick={props.toggleDrawerHandler(false)}>
                         <ListItemIcon>
                             <SearchIcon />
@@ -52,20 +52,20 @@ export default function Drawer(props){
                             <SettingsIcon />
                         </ListItemIcon>
                         <ListItemText primary="Settings" />
-
                     </ListItem>
+
                     <SettingsDialog
-                            open={openSettingsDialog}
-                            handleOpen={handleOpenSettings}
-                            handleClose={handleCloseSettings}
-                            title="Settings"
+                        open={openSettingsDialog}
+                        handleOpen={handleOpenSettings}
+                        handleClose={handleCloseSettings}
+                        title="Settings"
                     />
 
                     {/*<ListItem button key="Cadastros" onClick={() => {props.toggleDrawerHandler(false);handleClick();}}>
                         <ListItemIcon><FolderIcon /></ListItemIcon>
                         <ListItemText primary="Cadastros" />
                         {open ? <ExpandLess /> : <ExpandMore />}                       
-                     </ListItem>
+                        </ListItem>
 
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
