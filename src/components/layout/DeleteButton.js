@@ -32,7 +32,7 @@ export default function DeleteButton(props) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Are you sure that you want to delete this item?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title"><b>{"Delete this item?"}</b></DialogTitle>
                 <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {props.msg}
@@ -40,10 +40,10 @@ export default function DeleteButton(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>
-                        Cancel
+                        <b>Cancel</b>
                     </Button>
-                    <Button onClick={() => {props.funcao(props.chave)}} autoFocus color="secondary">
-                        Delete
+                    <Button onClick={() => {props.funcao(props.chave)}} autoFocus>
+                        <b>Delete</b>
                     </Button>
                 </DialogActions>
             </Dialog>
