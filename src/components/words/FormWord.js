@@ -126,10 +126,10 @@ function FormDialog(props){
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseExitDialog}>
+                    <Button onClick={handleCloseExitDialog} color="secondary">
                         <b>No</b>
                     </Button>
-                    <Button onClick={()=>{props.handleClose();handleCloseExitDialog()}} autoFocus>
+                    <Button onClick={()=>{props.handleClose();handleCloseExitDialog()}} color="secondary" autoFocus>
                         <b>Yes</b>
                     </Button>
                 </DialogActions>
@@ -219,7 +219,12 @@ function FormWord(props) {
                 <h1> {/*{wordOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}*/} </h1>
 
                 <Grid className={classes.root}>
-                <form onSubmit={handleSubmit(onSubmit)} className={classes.form}  noValidate autoComplete="off" >
+                <form 
+                    className={classes.form} 
+                    onSubmit={handleSubmit(onSubmit)} 
+                    onChange={()=>{props.setFormChanged()}}  
+                    noValidate autoComplete="off" 
+                >
                     <TextField 
                         className={classes.formFields}
                         id="word_title" 
@@ -234,7 +239,6 @@ function FormWord(props) {
                         size="small"
                         color="secondary"
                         required
-                        onChange={()=>{props.setFormChanged()}}
                     />
                     <br/>
                     <TextField 
@@ -273,8 +277,7 @@ function FormWord(props) {
                     <FormControl 
                         className={classes.formControl}
                         error={Boolean(errors.word_type)}
-                    >
-                      
+                    >    
                         <br/>
                         <Controller
                             control={control}
