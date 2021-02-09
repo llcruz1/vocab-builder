@@ -20,7 +20,7 @@ import {
 } from "react-router-dom";
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import {grey, deepPurple} from '@material-ui/core/colors';
+import {grey, indigo, deepPurple} from '@material-ui/core/colors';
 
 
 const App = (props) => {
@@ -30,9 +30,9 @@ const App = (props) => {
   const [darkState, setDarkState] = useState(prefersDarkMode);
 
   const palletType = darkState ? "dark" : "light";
-  const mainPrimaryColor = darkState ? grey[800] : deepPurple[600];
-  const mainSecondaryColor = darkState ? deepPurple[600] : deepPurple[600];
-  
+  const mainPrimaryColor = darkState ? grey[800] : deepPurple[700];
+  const mainSecondaryColor = darkState ? indigo['A200'] : indigo['A200'];
+ 
   const theme = React.useMemo(() => responsiveFontSizes(createMuiTheme({
     palette: {
       type: palletType,
