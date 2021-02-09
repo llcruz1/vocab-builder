@@ -94,6 +94,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   
   
 function FormDialog(props){
+
     const [openExitDialog, setOpenExitDialog] = useState(false);
 
     const handleOpenExitDialog = () => {
@@ -102,48 +103,59 @@ function FormDialog(props){
     
     const handleCloseExitDialog = () => {
         setOpenExitDialog(false);
-    };  
+    };
 
-const classes = useStyles();
+    const [formChanged, setFormChanged] = useState(false);
 
-return (
-    <div>
-    {/*---------------------------------------Confirm Exit Dialog-------------------------------*/}
-    <Dialog open={openExitDialog} onClose={handleCloseExitDialog}>
-        <DialogTitle id="alert-dialog-title">
-            Sure you want to lose the current input?
-        </DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    If you have unsaved changes, they will be lost.
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleCloseExitDialog}>
-                    No
-                </Button>
-                <Button onClick={()=>{props.handleClose();handleCloseExitDialog()}} autoFocus color="secondary">
-                    Yes
-                </Button>
-            </DialogActions>
-    </Dialog>
-    {/*-----------------------------------------------------------------------------------------*/}
-    
-    <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
-        <AppBar className={classes.appBar}>
-        <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleOpenExitDialog} aria-label="close">
-                <ArrowBackIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-                {props.title}
-            </Typography>
-        </Toolbar>
-        </AppBar>
-        <FormWord {...props} />
-    </Dialog>
-    </div>
-);
+    const isFormChanged = () => {
+        setFormChanged(true);
+    } 
+
+    const classes = useStyles();
+
+    return (
+        <div>
+        {/*---------------------------------------Confirm Exit Dialog-------------------------------*/}   
+        <Dialog open={openExitDialog} onClose={handleCloseExitDialog}>
+            <DialogTitle id="alert-dialog-title">
+                <b>Lose current input?</b>
+            </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Unsaved changes will be lost.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseExitDialog}>
+                        <b>No</b>
+                    </Button>
+                    <Button onClick={()=>{props.handleClose();handleCloseExitDialog()}} autoFocus>
+                        <b>Yes</b>
+                    </Button>
+                </DialogActions>
+        </Dialog>
+        {/*-----------------------------------------------------------------------------------------*/}
+        
+        <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
+            <AppBar className={classes.appBar}>
+            <Toolbar>
+                <IconButton 
+                    edge="start" 
+                    color="inherit" 
+                    onClick={()=>{formChanged ? handleOpenExitDialog() : props.handleClose(); setFormChanged(false)}} 
+                    aria-label="close"
+                >
+                    <ArrowBackIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                    {props.title}
+                </Typography>
+            </Toolbar>
+            </AppBar>
+            <FormWord {...props} setFormChanged={isFormChanged} />
+        </Dialog>
+        </div>
+    );
 
 }
 
@@ -222,6 +234,7 @@ function FormWord(props) {
                         size="small"
                         color="secondary"
                         required
+                        onChange={()=>{props.setFormChanged()}}
                     />
                     <br/>
                     <TextField 

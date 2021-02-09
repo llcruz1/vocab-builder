@@ -32,7 +32,7 @@ const App = (props) => {
   const palletType = darkState ? "dark" : "light";
   const mainPrimaryColor = darkState ? grey[800] : deepPurple[600];
   const mainSecondaryColor = darkState ? deepPurple[600] : deepPurple[600];
-
+  
   const theme = React.useMemo(() => responsiveFontSizes(createMuiTheme({
     palette: {
       type: palletType,
