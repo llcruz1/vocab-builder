@@ -13,9 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Zoom from '@material-ui/core/Zoom';
 import Divider from '@material-ui/core/Divider';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import BackdropFunction from '../layout/Backdrop';
 import SnackbarFunction from '../layout/Snackbar';
@@ -78,7 +76,7 @@ function RenderListWord(props) {
       default:
         break;
     }
-}, [status, error]);
+  }, [status, error]);
 
   //Change state from saved or deleted to loaded then renders List
   useEffect(() => {
@@ -171,7 +169,7 @@ function RenderListWord(props) {
   );
 }
 //-----------------------------------------------------------------------------------------------------//
-export default RenderListWord
+
 
 //--------------------------------------List-----------------------------------------------//
 function ListWords(props) {
@@ -179,7 +177,6 @@ function ListWords(props) {
   const words = useSelector(selectAllWords)
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
-  const classes = useStyles();
 
   useEffect(() => {
     if (status === 'not_loaded') {
@@ -207,16 +204,16 @@ function ListWords(props) {
       return (
         <List id="words">
             <Divider />
-            {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)}
+            {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)} {/* This will show 5 Skeleton lines while loading content*/}
         </List>
         );         
       case 'failed':
       default:
         return(
           <div>
-            <Backdrop className={classes.backdrop}>
-              <CircularProgress color="inherit" />
-            </Backdrop>
+            <List id="words">
+                {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)}
+            </List>
           </div>  
         ) 
   }  
@@ -228,48 +225,53 @@ function ListWords(props) {
 //----------------------------------Item-----------------------------------------------//
 function ItemWord(props) {
 
-  const classes = useStyles();
+  let listItemProps =  props.loading ? 
+    {
+      divider: true
+    }
+  :
+    {
+      divider: true,
+      button: true,
+      id: props.key,
+      onClick: () => props.setVisualizeId(props.word.id)
+    };
 
-  let listItemProps = {
-    divider: true,
-    button: true,
-    id: props.key,
-    onClick: () => props.setVisualizeId(props.word.id)
-  
-  }
+      return( 
+        <ListItem {...listItemProps}>
+        {props.loading ?
+          <ListItemText>
+            <Skeleton variant="text" width={'90%'} />
+          </ListItemText>
+        :   
+          <ListItemText
+              primary={props.word.word_title}
+          />
+        }
 
-  if(props != null && props.word != null && props.word.id != null){
-      return(
-        <>
-            <ListItem {...listItemProps}>
-              <ListItemText
-                  primary={props.word.word_title}
+        {props.loading ?
+          <ListItemSecondaryAction>
+            <Skeleton variant="circle" width={20} height={20} />
+          </ListItemSecondaryAction>
+        :
+          <ListItemSecondaryAction>
+              <Tooltip title="Edit" aria-label="Edit">
+                <IconButton id="edita_word" onClick = {() => props.setEditId(props.word.id)} >
+                  <EditIcon/>
+                </IconButton>
+              </Tooltip>
+              <DeleteButton
+                id="deleta_word" 
+                name="excluir_word"
+                msg="You're about to delete the selected vocabulary." 
+                funcao={props.onClickExcluirWord} 
+                chave={props.word.id}
               />
-              <ListItemSecondaryAction>
-                  <Tooltip title="Edit" aria-label="Edit">
-                    <IconButton id="edita_word" onClick = {() => props.setEditId(props.word.id)} >
-                      <EditIcon/>
-                    </IconButton>
-                  </Tooltip>
-            
-                  <DeleteButton
-                    id="deleta_word" 
-                    name="excluir_word"
-                    msg="You're about to delete the selected vocabulary." 
-                    funcao={props.onClickExcluirWord} 
-                    chave={props.word.id}
-                  />
-              </ListItemSecondaryAction>
-            </ListItem>
-       
-        </>
+          </ListItemSecondaryAction>
+        }  
+        </ListItem>
       );
-  }else{
-    return(
-      <div className={classes.messages}>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        Can't display the vocabulary list.
-      </div>)
-  }
 }
 //--------------------------------------------------------------------------------------------//
+
+export default RenderListWord
