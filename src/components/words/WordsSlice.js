@@ -29,6 +29,9 @@ export const updateWordServer = createAsyncThunk('words/updateWordServer', async
 export const wordsSlice = createSlice({
     name: 'words',
     initialState: initialState,
+    reducers: {
+        setStatus: (state, action) => {state.status = action.payload}
+    },
     extraReducers: {
        [fetchWords.pending]: (state, action) => {state.status = 'loading'},
        [fetchWords.fulfilled]: (state, action) => {state.status = 'loaded'; wordsAdapter.setAll(state, action.payload);},
@@ -41,6 +44,8 @@ export const wordsSlice = createSlice({
        [updateWordServer.fulfilled]: (state, action) => {state.status = 'saved'; wordsAdapter.upsertOne(state, action.payload);},
     },
 })
+
+export const { setStatus } = wordsSlice.actions
 
 export default wordsSlice.reducer
 
