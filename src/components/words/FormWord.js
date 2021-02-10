@@ -107,9 +107,11 @@ function FormDialog(props){
 
     const [formChanged, setFormChanged] = useState(false);
 
-    const isFormChanged = () => {
-        setFormChanged(true);
+    const isFormChanged = (e) => {
+        setFormChanged(e);
     } 
+
+    
 
     const classes = useStyles();
 
@@ -152,7 +154,7 @@ function FormDialog(props){
                 </Typography>
             </Toolbar>
             </AppBar>
-            <FormWord {...props} setFormChanged={isFormChanged} />
+            <FormWord {...props} setFormChange={isFormChanged} />
         </Dialog>
         </div>
     );
@@ -222,7 +224,7 @@ function FormWord(props) {
                 <form 
                     className={classes.form} 
                     onSubmit={handleSubmit(onSubmit)} 
-                    onChange={()=>{props.setFormChanged()}}  
+                    onChange={()=>{props.setFormChange(true)}}  
                     noValidate autoComplete="off" 
                 >
                     <TextField 
@@ -316,7 +318,14 @@ function FormWord(props) {
 
                     <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
                         <Tooltip title="Save" aria-label="save">
-                            <Fab type="submit" className={classes.fabButton} id="salva_word" name="btn_salvar_word" color="secondary" aria-label="save">
+                            <Fab 
+                                type="submit" 
+                                onClick = {()=>{props.setFormChange(false)}}
+                                className={classes.fabButton} 
+                                id="salva_word" 
+                                name="btn_salvar_word" 
+                                color="secondary" 
+                                aria-label="save">
                                 <DoneIcon />
                             </Fab>
                         </Tooltip>
