@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import EditIcon from '@material-ui/icons/Edit';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import List from '@material-ui/core/List';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,25 +23,6 @@ import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice'
-
-const useStyles = makeStyles((theme) => ({
-  fabButton: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3
-  },
-
-  messages: {
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-
-}));
 
 
 //--------------------------------RenderList-------------------------------------------//
