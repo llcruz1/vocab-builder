@@ -7,13 +7,16 @@ import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import List from '@material-ui/core/List';
-import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import Zoom from '@material-ui/core/Zoom';
 import Divider from '@material-ui/core/Divider';
 import Skeleton from '@material-ui/lab/Skeleton';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 
 import BackdropFunction from '../layout/Backdrop';
 import SnackbarFunction from '../layout/Snackbar';
@@ -226,52 +229,94 @@ function ListWords(props) {
 //----------------------------------Item-----------------------------------------------//
 function ItemWord(props) {
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   let listItemProps =  props.loading ? 
-    {
-      divider: true
-    }
+  {
+    divider: true
+  }
   :
-    {
-      divider: true,
-      button: true,
-      id: props.key,
-      onClick: () => props.setVisualizeId(props.word.id)
-    };
+  {
+    divider: true,
+    button: true,
+    id: props.key,
+    onClick: () => props.setVisualizeId(props.word.id)
+  };
 
-      return( 
-        <ListItem {...listItemProps}>
-        {props.loading ?
-          <ListItemText>
-            <Skeleton variant="text" width={'90%'} />
-          </ListItemText>
-        :   
-          <ListItemText
-              primary={props.word.word_title}
-          />
-        }
+  return( 
+    <ListItem {...listItemProps}>
+    {props.loading ?
+      <ListItemText>
+        <Skeleton variant="text" width={'90%'} />
+      </ListItemText>
+    :   
+      <ListItemText
+          primary={props.word.word_title}
+      />
+    }
 
-        {props.loading ?
-          <ListItemSecondaryAction>
-            <Skeleton variant="circle" width={20} height={20} />
-          </ListItemSecondaryAction>
-        :
-          <ListItemSecondaryAction>
-              <Tooltip title="Edit" aria-label="Edit">
-                <IconButton id="edita_word" onClick = {() => props.setEditId(props.word.id)} >
-                  <EditIcon/>
-                </IconButton>
-              </Tooltip>
-              <DeleteButton
-                id="deleta_word" 
-                name="excluir_word"
-                msg="You're about to delete the selected vocabulary." 
-                funcao={props.onClickExcluirWord} 
-                chave={props.word.id}
-              />
-          </ListItemSecondaryAction>
-        }  
-        </ListItem>
-      );
+    {props.loading ?
+      <ListItemSecondaryAction>
+        <Skeleton variant="circle" width={20} height={20} />
+      </ListItemSecondaryAction>
+    :
+      <ListItemSecondaryAction>
+          <Tooltip title="Show options" aria-label="show options">
+            <IconButton
+              aria-label="show menu"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <MoreVertIcon/>
+            </IconButton>
+          </Tooltip>
+
+          <Menu
+            id="menu"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleCloseMenu}
+          >
+
+          <MenuItem onClick={()=> {handleCloseMenu();props.setEditId(props.word.id)}}>       
+            Edit
+          </MenuItem>
+
+          <MenuItem onClick={handleCloseMenu}>
+            <DeleteButton
+              id="deleta_word" 
+              name="excluir_word"
+              msg="You're about to delete this word." 
+              funcao={props.onClickExcluirWord} 
+              chave={props.word.id}
+            />
+          </MenuItem>
+          </Menu>
+
+
+      </ListItemSecondaryAction>
+    }  
+    </ListItem>
+  );
 }
 //--------------------------------------------------------------------------------------------//
 
