@@ -30,6 +30,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
+import MainActionButton from '../layout/MainActionButton.js'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -316,20 +317,15 @@ function FormWord(props) {
                         />
                     </FormControl>
 
-                    <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
-                        <Tooltip title="Save" aria-label="save">
-                            <Fab 
-                                type="submit" 
-                                onClick = {()=>{props.setFormChange(false)}}
-                                className={classes.fabButton} 
-                                id="salva_word" 
-                                name="btn_salvar_word" 
-                                color="secondary" 
-                                aria-label="save">
-                                <DoneIcon />
-                            </Fab>
-                        </Tooltip>
-                    </Zoom>
+                    <MainActionButton
+                        type="submit"
+                        title="Save"
+                        ariaLabel="save"
+                        onClick={()=>{props.setFormChange(false)}}
+                        id="salva_word"
+                        name="btn_salvar_word"
+                        icon={<DoneIcon />}
+                    />
                 </form>
  
                 </Grid>

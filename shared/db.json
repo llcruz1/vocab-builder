@@ -1,22 +1,40 @@
 {
   "words": [
     {
-      "word_title": "Katze",
-      "word_description": "The cat.",
-      "word_examples": "Katzen und Hunde.",
+      "word_title": "Hund",
+      "word_description": "Dog",
+      "word_examples": "Ein Hund",
       "word_type": [
         "Noun"
       ],
       "id": 1
     },
     {
-      "word_title": "Hund",
-      "word_description": "Dog",
-      "word_examples": "Ein Hund, eine Katze.",
+      "word_title": "Hähnchen",
+      "word_description": "Chicken",
+      "word_examples": "Unsere Hähnchen-Rezepte holen das beste aus dem zarten Fleisch heraus. ",
       "word_type": [
         "Noun"
       ],
       "id": 2
+    },
+    {
+      "word_title": "Katze",
+      "word_description": "Cat",
+      "word_examples": "Eine Katze und ein Hund.",
+      "word_type": [
+        "Noun"
+      ],
+      "id": 3
+    },
+    {
+      "word_title": "Anpacken",
+      "word_description": "To tackle.",
+      "word_examples": "Nichts kann aufhalten, was wir gemeinsam anpacken.",
+      "word_type": [
+        "Verb"
+      ],
+      "id": 4
     }
   ]
 }

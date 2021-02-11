@@ -18,6 +18,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import BackdropFunction from '../layout/Backdrop';
 import SnackbarFunction from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
+import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
 
@@ -49,7 +50,6 @@ function RenderListWord(props) {
   const status = useSelector(state => state.words.status);
   const error = useSelector(state => state.words.error)
   const dispatch = useDispatch();
-  const classes = useStyles();
   const [openVisualizeDialog, setOpenVisualizeDialog] = useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [editId, setEditId] = useState(0);
@@ -157,13 +157,14 @@ function RenderListWord(props) {
                 setOpenSnackbar={setOpenSnackbar} 
               />
 
-              <Zoom in={true} timeout = {{enter: 500, exit: 500}} unmountOnExit>
-                <Tooltip title="Add vocabulary" aria-label="add">
-                  <Fab onClick={handleOpenFormWord} className={classes.fabButton} id="novo_word" name="btn_novo_word" color="secondary" aria-label="add">
-                      <AddIcon />
-                  </Fab>
-                </Tooltip>
-              </Zoom>
+              <MainActionButton
+                title="Add Word"
+                ariaLabel="add"
+                onClick={handleOpenFormWord}
+                id="novo_word"
+                name="btn_novo_word"
+                icon={<AddIcon />}
+              />
           </div>
           </>
   );
