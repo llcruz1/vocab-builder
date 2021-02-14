@@ -15,8 +15,8 @@ import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 
-import BackdropFunction from '../layout/Backdrop';
-import SnackbarFunction from '../layout/Snackbar';
+import Backdrop from '../layout/Backdrop';
+import Snackbar from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
 import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeWord';
@@ -130,8 +130,11 @@ function RenderListWord(props) {
                   title={editId === 0 ? "Add Word" : "Edit Word"}
               />
 
-              <BackdropFunction open={status === 'saving' || status === 'deleting'}/>
-              <SnackbarFunction 
+              <Backdrop 
+                open={status === 'saving' || status === 'deleting'}
+              />
+
+              <Snackbar
                 msg={msg} 
                 openSnackbar={openSnackbar}  
                 setMsg={setMsg} 
@@ -234,7 +237,7 @@ function ItemWord(props) {
     <ListItem {...listItemProps}>
     {props.loading ?
       <ListItemText>
-        <Skeleton variant="text" width={'90%'} />
+        <Skeleton variant="text" width={100} />
       </ListItemText>
     :   
       <ListItemText

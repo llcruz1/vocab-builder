@@ -1,5 +1,5 @@
 import React from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
+import MuiSnackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SnackbarFunction(props){
+export default function Snackbar(props){
     const classes = useStyles();
 
     const handleClose = (event, reason) => {
@@ -26,7 +26,7 @@ export default function SnackbarFunction(props){
     };
 
     return (
-                <Snackbar 
+                <MuiSnackbar 
                     className={classes.snackbar}
                     open={props.openSnackbar} 
                     autoHideDuration={2000} 
