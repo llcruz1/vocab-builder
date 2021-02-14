@@ -23,10 +23,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
 import DoneIcon from '@material-ui/icons/Done';
-import Zoom from '@material-ui/core/Zoom';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
@@ -121,7 +118,7 @@ function FormDialog(props){
         {/*---------------------------------------Confirm Exit Dialog-------------------------------*/}   
         <Dialog open={openExitDialog} onClose={handleCloseExitDialog}>
             <DialogTitle id="alert-dialog-title">
-                <b>Lose current input?</b>
+                Lose current input?
             </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -130,10 +127,10 @@ function FormDialog(props){
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseExitDialog} color="secondary">
-                        <b>No</b>
+                        No
                     </Button>
                     <Button onClick={()=>{props.handleClose();handleCloseExitDialog()}} color="secondary" autoFocus>
-                        <b>Yes</b>
+                        Yes
                     </Button>
                 </DialogActions>
         </Dialog>
