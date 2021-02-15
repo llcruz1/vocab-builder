@@ -14,6 +14,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SearchIcon from "@material-ui/icons/Search";
 
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
@@ -35,12 +38,53 @@ function RenderListWord(props) {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [editId, setEditId] = useState(0);
   const [visualizeId, setVisualizeId] = useState(0);
-
   const [msg, setMsg] = useState(props.msg);
   const [openSnackbar, setOpenSnackbar] = useState(props.open);
+ 
+  function handleClickExcluirWord(id){
+    dispatch(deleteWordServer(id));
+  }
 
-  //Display messages on Snackbar accordingly with requests' status
+  function handleOpenVisualizeWord(idWord){
+    setVisualizeId(idWord);
+    setOpenVisualizeDialog(true);
+  }
+
+  function handleCloseVisualizeWord(){
+      setOpenVisualizeDialog(false);
+  }
+
+  function handleOpenFormWord(idWord){
+    if (typeof(idWord) != 'number') {      
+      // When clicking on Add button, idWord value is "Object object"
+      idWord=0;
+    }
+    setEditId(idWord);
+    setOpenFormDialog(true);
+  }
+
+  function handleCloseFormWord(){
+      setOpenFormDialog(false);
+  }
+
   useEffect(() => {
+    //Change state from saved or deleted to loaded, then renders List
+    if (status === 'saved' || status === 'deleted'){
+        dispatch(setStatus('loaded'));
+    }
+  }, [status, dispatch]);
+
+  useEffect(() => {
+    //Try to fetch words if failed or not loaded.
+    if (status === 'not_loaded' ) {
+        dispatch(fetchWords())
+    }else if(status === 'failed'){
+        setTimeout(()=>dispatch(fetchWords()), 5000);
+    }
+  }, [status, dispatch])
+
+  useEffect(() => {
+    //Display messages on Snackbar accordingly with requests' status
     switch(status){
       case 'failed': 
         setMsg("Can't load content");
@@ -59,52 +103,12 @@ function RenderListWord(props) {
     }
   }, [status, error]);
 
-  //Change state from saved or deleted to loaded then renders List
-  useEffect(() => {
-    if (status === 'saved' || status === 'deleted'){
-        dispatch(setStatus('loaded'));
-    }
-  }, [status, dispatch]);  
-
-  function handleClickExcluirWord(id){
-    dispatch(deleteWordServer(id));
-  }
-
-  function handleOpenVisualizeWord(idWord){
-    setVisualizeId(idWord);
-    setOpenVisualizeDialog(true);
-  }
-
-  function handleCloseVisualizeWord(){
-      setOpenVisualizeDialog(false);
-  }
-
-  function handleOpenFormWord(idWord){
-    if (typeof(idWord) != 'number') {      
-      idWord=0; // When clicking on Add button, idWord value is "Object object"
-    }
-    setEditId(idWord);
-    setOpenFormDialog(true);
-  }
-
-  function handleCloseFormWord(){
-      setOpenFormDialog(false);
-  }
-
-  useEffect(() => {
-    if (status === 'not_loaded' ) {
-        dispatch(fetchWords())
-    }else if(status === 'failed'){
-        setTimeout(()=>dispatch(fetchWords()), 5000);
-    }
-  }, [status, dispatch])
-
 
   return( <>
           <div style={{ width: '100%' }}>
             <Box m={1} display="flex" justifyContent="flex-start" >
               <Typography variant="h4">
-                Vocabulary
+                
               </Typography>
             </Box>
 
@@ -114,41 +118,41 @@ function RenderListWord(props) {
               setEditId={handleOpenFormWord} 
             />
 
-              <VisualizeDialog 
-                  id={visualizeId} 
-                  open={openVisualizeDialog}
-                  handleOpen={handleOpenVisualizeWord} 
-                  handleClose={handleCloseVisualizeWord} 
-                  title="View"
-              />
+            <VisualizeDialog 
+                id={visualizeId} 
+                open={openVisualizeDialog}
+                handleOpen={handleOpenVisualizeWord} 
+                handleClose={handleCloseVisualizeWord} 
+                title="View"
+            />
 
-              <FormDialog 
-                  id={editId} 
-                  open={openFormDialog}
-                  handleOpen={handleOpenFormWord} 
-                  handleClose={handleCloseFormWord} 
-                  title={editId === 0 ? "Add Word" : "Edit Word"}
-              />
+            <FormDialog 
+                id={editId} 
+                open={openFormDialog}
+                handleOpen={handleOpenFormWord} 
+                handleClose={handleCloseFormWord} 
+                title={editId === 0 ? "Add Word" : "Edit Word"}
+            />
 
-              <Backdrop 
-                open={status === 'saving' || status === 'deleting'}
-              />
+            <Backdrop 
+              open={status === 'saving' || status === 'deleting'}
+            />
 
-              <Snackbar
-                msg={msg} 
-                openSnackbar={openSnackbar}  
-                setMsg={setMsg} 
-                setOpenSnackbar={setOpenSnackbar} 
-              />
+            <Snackbar
+              msg={msg} 
+              openSnackbar={openSnackbar}  
+              setMsg={setMsg} 
+              setOpenSnackbar={setOpenSnackbar} 
+            />
 
-              <MainActionButton
-                title="Add Word"
-                ariaLabel="add"
-                onClick={handleOpenFormWord}
-                id="novo_word"
-                name="btn_novo_word"
-                icon={<AddIcon />}
-              />
+            <MainActionButton
+              title="Add Word"
+              ariaLabel="add"
+              onClick={handleOpenFormWord}
+              id="novo_word"
+              name="btn_novo_word"
+              icon={<AddIcon />}
+            />
           </div>
           </>
   );
@@ -163,7 +167,20 @@ function ListWords(props) {
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
 
+  const [search, setSearch] = useState("");
+  const [filteredWords, setFilteredWords] = useState([]);
+
   useEffect(() => {
+    //Filter word title that starts with user input
+    setFilteredWords(
+      words.filter((word) =>
+        word.word_title.toLowerCase().startsWith(search.toLowerCase())
+      )
+    );
+  }, [search, words]);
+
+  useEffect(() => {
+    //Try to fetch if not loaded
     if (status === 'not_loaded') {
         dispatch(fetchWords())
     } 
@@ -173,23 +190,40 @@ function ListWords(props) {
     case 'loaded': case 'saved': case 'deleting': case 'saving':
       return(
           <Box justifyContent="flex-start">
-            <List>
-              {words.map((word) =>
-              <ItemWord 
-                key={word.id} 
-                word={word} 
-                onClickExcluirWord={props.onClickExcluirWord}
-                setVisualizeId={props.setVisualizeId}
-                setEditId={props.setEditId}
-              />)}                      
-            </List>
+
+          <TextField
+            type = "search"
+            label="Search Words"
+            placeholder="Search Words"
+            variant="outlined"
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{ 
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <List>
+            {filteredWords.map((word) =>
+            <ItemWord 
+              key={word.id} 
+              word={word} 
+              onClickExcluirWord={props.onClickExcluirWord}
+              setVisualizeId={props.setVisualizeId}
+              setEditId={props.setEditId}
+            />)}                      
+          </List>
           </Box>
       );
       case 'loading':   
       return (
         <List id="words">
             <Divider />
-            {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)} {/* This will show 5 Skeleton lines while loading content*/}
+            {/* This will show 5 Skeleton lines while loading content*/}
+            {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)}
         </List>
         );         
       case 'failed':
@@ -292,8 +326,6 @@ function ItemWord(props) {
             />
           </MenuItem>
           </Menu>
-
-
       </ListItemSecondaryAction>
     }  
     </ListItem>
