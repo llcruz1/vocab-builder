@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    fontWeight: 550,
   },
 }));
 
@@ -38,9 +37,9 @@ export default function ButtonAppBar(props) {
             Vocab Builder
           </Typography>
           <Tooltip title="Toggle dark mode">
-                <IconButton edge="start" className={classes.menuButton} onClick={props.handleThemeChange} color="inherit" aria-label="toggle dark mode">
-                    {icon}
-                </IconButton>
+            <IconButton edge="start" className={classes.menuButton} onClick={props.handleThemeChange} color="inherit" aria-label="toggle dark mode">
+                {icon}
+            </IconButton>
           </Tooltip>    
         </Toolbar>
       </AppBar>

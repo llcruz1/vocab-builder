@@ -13,7 +13,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
+import Typography from '@material-ui/core/Typography';
 
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
@@ -102,10 +102,10 @@ function RenderListWord(props) {
 
   return( <>
           <div style={{ width: '100%' }}>
-            <Box display="flex" justifyContent="flex-start" >
-              <Box>
-                <div id="lbl_titulo_pagina"><h1>Your vocabulary</h1></div>
-              </Box>
+            <Box m={1} display="flex" justifyContent="flex-start" >
+              <Typography variant="h4">
+                Vocabulary
+              </Typography>
             </Box>
 
             <ListWords 

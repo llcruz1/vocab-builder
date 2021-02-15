@@ -11,9 +11,34 @@ import ListIcon from '@material-ui/icons/List';
 import {Link} from "react-router-dom";
 import SettingsIcon from '@material-ui/icons/Settings';
 import {SettingsDialog} from '../settings/settingsPage';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles} from '@material-ui/core/styles';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme)=>({
+
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+        drawerPaper: {
+        width: drawerWidth,
+    },
+
+    header: {
+        paddingTop: 10,
+        paddingLeft: 20,     
+    },
+
+    caption: {
+        paddingLeft: 20,
+    }
+
+}));
 
 
 export default function Drawer(props){
+
+    const classes = useStyles();
 
     const [openSettingsDialog, setOpenSettingsDialog] = useState(false);
 
@@ -30,6 +55,17 @@ export default function Drawer(props){
             onOpen={props.toggleDrawerHandler(true)} 
             onClose={props.toggleDrawerHandler(false)} >
             <Box width={250}>
+                <Box>
+                    <div className={classes.toolbar}>
+                        <Typography className={classes.header} variant="h6" gutterBottom>
+                            Vocab Builder
+                        </Typography>
+                        <Typography className={classes.caption} variant="caption" display="block" gutterBottom>
+                            v0.0.1
+                        </Typography>
+                    </div>
+                    <Divider/>
+                </Box>
                 <List>
                     <ListItem button key="Languages" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
                         <ListItemIcon>
