@@ -14,9 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from "@material-ui/core/InputAdornment";
-import SearchIcon from "@material-ui/icons/Search";
+
 
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
@@ -24,8 +22,9 @@ import DeleteButton from '../layout/DeleteButton.js'
 import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
+import SearchBar from '../layout/SearchBar';
 
-import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice'
+import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
 
 
 //--------------------------------RenderList-------------------------------------------//
@@ -191,19 +190,8 @@ function ListWords(props) {
       return(
           <Box justifyContent="flex-start">
 
-          <TextField
-            type = "search"
-            label="Search Words"
-            placeholder="Search Words"
-            variant="outlined"
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{ 
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+          <SearchBar
+            function={(e) => setSearch(e.target.value)}
           />
 
           <List>

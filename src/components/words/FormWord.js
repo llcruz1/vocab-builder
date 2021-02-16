@@ -108,8 +108,6 @@ function FormDialog(props){
         setFormChanged(e);
     } 
 
-    
-
     const classes = useStyles();
 
     return (
