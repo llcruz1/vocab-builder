@@ -5,15 +5,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 
 import {selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
+
+import PageDialog from '../layout/PageDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,47 +28,21 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
+    
+}));
 
-    form: {
-      '& > *': {
-          margin: theme.spacing(1),
-          width: '25ch',
-      },
-    },
-
-    appBar: {
-      position: 'relative',
-    },
-    title: {
-      marginLeft: theme.spacing(2),
-      flex: 1,
-    },
-  
-  }));
-
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-  
-  
   function VisualizeDialog(props){
-    const classes = useStyles();
     return (
-      <div>
-        <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
-          <AppBar className={classes.appBar}>
-            <Toolbar>
-              <IconButton edge="start" color="inherit" onClick={props.handleClose} aria-label="close">
-                <ArrowBackIcon />
-              </IconButton>
-              <Typography variant="h6" className={classes.title}>
-                {props.title}
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <VisualizeWord {...props} />
-        </Dialog>
-      </div>
+      <>
+        <PageDialog
+          open={props.open} 
+          handleClose={props.handleClose}
+          onClickButton={props.handleClose}
+          title={props.title}
+          iconButton={<ArrowBackIcon />}
+          pageContent={<VisualizeWord {...props}/>} 
+        />
+      </>
     );
   
   }

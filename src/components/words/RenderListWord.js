@@ -27,9 +27,9 @@ import SearchBar from '../layout/SearchBar';
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
 
 
-//--------------------------------RenderList-------------------------------------------//
-function RenderListWord(props) {
 
+function RenderListWord(props) {
+  //Renders the main page of the application and calls the ListWords component
   const status = useSelector(state => state.words.status);
   const error = useSelector(state => state.words.error)
   const dispatch = useDispatch();
@@ -156,12 +156,9 @@ function RenderListWord(props) {
           </>
   );
 }
-//-----------------------------------------------------------------------------------------------------//
 
-
-//--------------------------------------List-----------------------------------------------//
 function ListWords(props) {
-
+  //Fetches words, allows user to filter them through SearchBar and maps them in the ItemWord component
   const words = useSelector(selectAllWords)
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
@@ -226,12 +223,9 @@ function ListWords(props) {
   }  
 
 }
-//------------------------------------------------------------------------------------//
 
-
-//----------------------------------Item-----------------------------------------------//
 function ItemWord(props) {
-
+  //Renders word title and buttons in a ListItem component
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -257,65 +251,65 @@ function ItemWord(props) {
 
   return( 
     <ListItem {...listItemProps}>
-    {props.loading ?
-      <ListItemText>
-        <Skeleton variant="text" width={100} />
-      </ListItemText>
-    :   
-      <ListItemText
-          primary={props.word.word_title}
-      />
-    }
+      {props.loading ?
+        <ListItemText>
+          <Skeleton variant="text" width={100} />
+        </ListItemText>
+      :   
+        <ListItemText
+            primary={props.word.word_title}
+        />
+      }
 
-    {props.loading ?
-      <ListItemSecondaryAction>
-        <Skeleton variant="circle" width={20} height={20} />
-      </ListItemSecondaryAction>
-    :
-      <ListItemSecondaryAction>
-          <Tooltip title="Show options" aria-label="show options">
-            <IconButton
-              aria-label="show menu"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
+      {props.loading ?
+        <ListItemSecondaryAction>
+          <Skeleton variant="circle" width={20} height={20} />
+        </ListItemSecondaryAction>
+      :
+        <ListItemSecondaryAction>
+            <Tooltip title="Show options" aria-label="show options">
+              <IconButton
+                aria-label="show menu"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <MoreVertIcon/>
+              </IconButton>
+            </Tooltip>
+
+            <Menu
+              id="menu"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={open}
+              onClose={handleCloseMenu}
             >
-              <MoreVertIcon/>
-            </IconButton>
-          </Tooltip>
 
-          <Menu
-            id="menu"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={open}
-            onClose={handleCloseMenu}
-          >
+              <MenuItem onClick={()=> {handleCloseMenu();props.setEditId(props.word.id)}}>       
+                Edit
+              </MenuItem>
 
-          <MenuItem onClick={()=> {handleCloseMenu();props.setEditId(props.word.id)}}>       
-            Edit
-          </MenuItem>
-
-          <MenuItem onClick={handleCloseMenu}>
-            <DeleteButton
-              id="deleta_word" 
-              name="excluir_word"
-              msg="You're about to delete this word." 
-              funcao={props.onClickExcluirWord} 
-              chave={props.word.id}
-            />
-          </MenuItem>
-          </Menu>
-      </ListItemSecondaryAction>
-    }  
+              <MenuItem onClick={handleCloseMenu}>
+                <DeleteButton
+                  id="deleta_word" 
+                  name="excluir_word"
+                  msg="You're about to delete this word." 
+                  funcao={props.onClickExcluirWord} 
+                  chave={props.word.id}
+                />
+              </MenuItem>
+            </Menu>
+        </ListItemSecondaryAction>
+      }  
     </ListItem>
   );
 }

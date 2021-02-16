@@ -17,17 +17,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
 import MainActionButton from '../layout/MainActionButton.js'
+import PageDialog from '../layout/PageDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,28 +63,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
 
-  appBar: {
-    position: 'relative',
-  },
-
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-
-  fabButton: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 3
-  },
-
 }));
-
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-  
   
 function FormDialog(props){
 
@@ -108,12 +83,10 @@ function FormDialog(props){
         setFormChanged(e);
     } 
 
-    const classes = useStyles();
-
     return (
-        <div>
-        {/*---------------------------------------Confirm Exit Dialog-------------------------------*/}   
+        <>   
         <Dialog open={openExitDialog} onClose={handleCloseExitDialog}>
+        {/*------Confirm Exit Dialog--------*/}
             <DialogTitle id="alert-dialog-title">
                 Lose current input?
             </DialogTitle>
@@ -131,31 +104,18 @@ function FormDialog(props){
                     </Button>
                 </DialogActions>
         </Dialog>
-        {/*-----------------------------------------------------------------------------------------*/}
         
-        <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
-            <AppBar className={classes.appBar}>
-            <Toolbar>
-                <IconButton 
-                    edge="start" 
-                    color="inherit" 
-                    onClick={()=>{formChanged ? handleOpenExitDialog() : props.handleClose(); setFormChanged(false)}} 
-                    aria-label="close"
-                >
-                    <ArrowBackIcon />
-                </IconButton>
-                <Typography variant="h6" className={classes.title}>
-                    {props.title}
-                </Typography>
-            </Toolbar>
-            </AppBar>
-            <FormWord {...props} setFormChange={isFormChanged} />
-        </Dialog>
-        </div>
+        <PageDialog
+            open={props.open} 
+            handleClose={props.handleClose}
+            onClickButton={()=>{formChanged ? handleOpenExitDialog() : props.handleClose(); setFormChanged(false)}}
+            title={props.title}
+            iconButton={<ArrowBackIcon />}
+            pageContent={<FormWord {...props} setFormChange={isFormChanged} />} 
+        />
+        </>
     );
-
 }
-
 
 function FormWord(props) {
 
