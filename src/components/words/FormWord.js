@@ -128,7 +128,7 @@ function FormWord(props) {
         'Preposition',
         'Conjunction',
         'Interjection',
-        'Expression',
+        'Idiom',
         'Slang',
         'Phrasal Verb',
       ];

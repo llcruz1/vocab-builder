@@ -15,14 +15,14 @@ import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
 
-
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
 import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
-import SearchBar from '../layout/SearchBar';
+import AppBar from '../layout/AppBar';
+import Drawer from '../layout/Drawer';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
 
@@ -39,8 +39,16 @@ function RenderListWord(props) {
   const [visualizeId, setVisualizeId] = useState(0);
   const [msg, setMsg] = useState(props.msg);
   const [openSnackbar, setOpenSnackbar] = useState(props.open);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawerHandler = (open) => (event) => {
+    if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
+        return;
+    }
+    setDrawerOpen(open);
+  };
  
-  function handleClickExcluirWord(id){
+  function handleClickDeleteWord(id){
     dispatch(deleteWordServer(id));
   }
 
@@ -102,8 +110,18 @@ function RenderListWord(props) {
     }
   }, [status, error]);
 
+  const [search, setSearch] = useState("");
 
   return( <>
+
+          <AppBar 
+            toggleDrawerHandler={toggleDrawerHandler}
+            function={(e) => setSearch(e.target.value)}
+            handleThemeChange={props.handleThemeChange} 
+            darkState={props.darkState}
+          />
+          <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
+
           <div style={{ width: '100%' }}>
             <Box m={1} display="flex" justifyContent="flex-start" >
               <Typography variant="h4">
@@ -112,9 +130,10 @@ function RenderListWord(props) {
             </Box>
 
             <ListWords 
-              onClickExcluirWord={handleClickExcluirWord} 
+              onClickDeleteWord={handleClickDeleteWord} 
               setVisualizeId={handleOpenVisualizeWord} 
               setEditId={handleOpenFormWord} 
+              search={search}
             />
 
             <VisualizeDialog 
@@ -163,17 +182,16 @@ function ListWords(props) {
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
 
-  const [search, setSearch] = useState("");
   const [filteredWords, setFilteredWords] = useState([]);
 
   useEffect(() => {
     //Filter word title that starts with user input
     setFilteredWords(
       words.filter((word) =>
-        word.word_title.toLowerCase().startsWith(search.toLowerCase())
+        word.word_title.toLowerCase().startsWith(props.search.toLowerCase())
       )
     );
-  }, [search, words]);
+  }, [props.search, words]);
 
   useEffect(() => {
     //Try to fetch if not loaded
@@ -187,16 +205,16 @@ function ListWords(props) {
       return(
           <Box justifyContent="flex-start">
 
-          <SearchBar
+          {/*<SearchBar
             function={(e) => setSearch(e.target.value)}
-          />
+          />*/}
 
           <List>
             {filteredWords.map((word) =>
             <ItemWord 
               key={word.id} 
               word={word} 
-              onClickExcluirWord={props.onClickExcluirWord}
+              onClickDeleteWord={props.onClickDeleteWord}
               setVisualizeId={props.setVisualizeId}
               setEditId={props.setEditId}
             />)}                      
@@ -303,8 +321,8 @@ function ItemWord(props) {
                   id="deleta_word" 
                   name="excluir_word"
                   msg="You're about to delete this word." 
-                  funcao={props.onClickExcluirWord} 
-                  chave={props.word.id}
+                  function={props.onClickDeleteWord} 
+                  parameter={props.word.id}
                 />
               </MenuItem>
             </Menu>
@@ -313,6 +331,5 @@ function ItemWord(props) {
     </ListItem>
   );
 }
-//--------------------------------------------------------------------------------------------//
 
 export default RenderListWord

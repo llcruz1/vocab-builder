@@ -40,7 +40,7 @@ export default function DeleteButton(props) {
                     <Button onClick={handleClose} color="secondary">
                         Cancel
                     </Button>
-                    <Button onClick={() => {props.funcao(props.chave)}} color="secondary" autoFocus>
+                    <Button onClick={() => {props.function(props.parameter)}} color="secondary" autoFocus>
                         Delete
                     </Button>
                 </DialogActions>

@@ -28,11 +28,11 @@
       "id": 3
     },
     {
-      "word_title": "Anpacken",
-      "word_description": "To tackle.",
-      "word_examples": "Nichts kann aufhalten, was wir gemeinsam anpacken.",
+      "word_title": "Vogel",
+      "word_description": "Bird",
+      "word_examples": "Einige Vögel als Schwarm fliegend in der Luft",
       "word_type": [
-        "Verb"
+        "Noun"
       ],
       "id": 4
     }

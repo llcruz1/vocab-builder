@@ -3,9 +3,6 @@ import {store} from './Store';
 import {Provider} from 'react-redux'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider, createMuiTheme, responsiveFontSizes  } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import AppBar from './components/layout/AppBar';
-import Drawer from './components/layout/Drawer';
 
 import RenderListWord from './components/words/RenderListWord';
 import {FormWord} from './components/words/FormWord';
@@ -51,37 +48,22 @@ const App = (props) => {
     setDarkState(!darkState);
   };
   
-  //theme = responsiveFontSizes(theme);
-  //estado do drawer
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  //handler de abrir e fechar o drawer
-  const toggleDrawerHandler = (open) => (event) => {
-    if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
-        return;
-    }
-    setDrawerOpen(open);
-  };
-
 
   return( <>
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <Provider store={store}>                
-                <Router>    
-                    <AppBar handleThemeChange={handleThemeChange} darkState={darkState} toggleDrawerHandler={toggleDrawerHandler} />
-                    <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
-                    <Container maxWidth="xl">
+                <Router>   
                       <div>
                         <Switch>
-                          <Route exact path="/"><RenderListWord/></Route>
+                          <Route exact path="/"><RenderListWord handleThemeChange={handleThemeChange} darkState={darkState}/></Route>
                           <Route exact path="/words/novo"><FormWord fromMenu={true}/></Route>
                           <Route exact path="/words/:id"><FormWord fromMenu={true}/></Route>
                           <Route exact path="/words/visualize/:id"><VisualizeWord/></Route>
-                          <Route exact path="/words"><RenderListWord/></Route>      
-                          <Route exact path="/settings" ><Settings/></Route>      
+                          <Route exact path="/words"><RenderListWord handleThemeChange={handleThemeChange} darkState={darkState} /></Route>      
+                          <Route exact path="/settings" ><Settings/></Route>     
                         </Switch>
                       </div>
-                    </Container>
                 </Router>
               </Provider>
             </ThemeProvider>
