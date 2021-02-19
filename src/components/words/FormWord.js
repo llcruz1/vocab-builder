@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams, useHistory } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,9 +19,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import DoneIcon from '@material-ui/icons/Done';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
+import {selectAllLanguages, fetchLanguages} from '../languages/LanguagesSlice'
 import MainActionButton from '../layout/MainActionButton.js'
 import PageDialog from '../layout/PageDialog';
 
@@ -136,6 +141,12 @@ function FormWord(props) {
     const history  = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles(); 
+    
+    const languages = useSelector(selectAllLanguages);
+
+    useEffect(() => {
+        dispatch(fetchLanguages(languages))
+    }, [])
 
     let { id } = useParams();
     id = props.id ? props.id : id;
@@ -182,6 +193,37 @@ function FormWord(props) {
                     onChange={()=>{props.setFormChange(true)}}  
                     noValidate autoComplete="off" 
                 >
+
+                    <FormControl 
+                        className={classes.formControl}
+                        error={Boolean(errors.word_language)}
+                        size="small"
+                    > 
+                    
+                        <InputLabel shrink>Language</InputLabel>
+
+                        <Controller
+                        as={
+                            <Select>
+                                {languages.map((option) => (
+                                    <MenuItem key={option.language_title} value={option.language_title}>
+                                        {option.language_title}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        }
+                        id="word_language"
+                        style = {{width: 200}}
+                        InputLabelProps={{ shrink: true }}
+                        name="word_language" 
+                        control={control}
+                        defaultValue={wordOnLoad.id == null ? '' : wordOnLoad.word_language}
+                        />
+                        <FormHelperText>
+                        {errors.word_language?.message}
+                        </FormHelperText>
+                    </FormControl>
+                    <br/>
                     <TextField 
                         className={classes.formFields}
                         id="word_title" 
@@ -197,7 +239,7 @@ function FormWord(props) {
                         color="secondary"
                         required
                     />
-                    <br/>
+                   
                     <TextField 
                         className={classes.formFields}
                         id="word_description" 
@@ -210,7 +252,7 @@ function FormWord(props) {
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
                         multiline
-                        rows={3}
+                        rows={2}
                         color="secondary"
                     />
                     <br/>    
@@ -226,11 +268,10 @@ function FormWord(props) {
                         InputLabelProps={{ shrink: true }}
                         variant="outlined"
                         multiline
-                        rows={3}
+                        rows={2}
                         color="secondary"
                     />
                     <br/>
-
                     <FormControl 
                         className={classes.formControl}
                         error={Boolean(errors.word_type)}
@@ -269,7 +310,7 @@ function FormWord(props) {
                                 );
                             }}
                         />
-                    </FormControl>
+                    </FormControl>     
 
                     <MainActionButton
                         type="submit"

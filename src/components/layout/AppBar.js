@@ -97,7 +97,7 @@ export default function ButtonAppBar(props) {
             <InputBase
               type="search"
               onChange={props.function}
-              placeholder="Search Word…"
+              placeholder= {props.searchMessage}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

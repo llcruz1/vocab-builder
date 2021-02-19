@@ -67,14 +67,14 @@ export default function Drawer(props){
                     <Divider/>
                 </Box>
                 <List>
-                    <ListItem button key="Languages" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
+                    <ListItem button key="Languages" onClick={props.toggleDrawerHandler(false)} component={Link} to="/languages">
                         <ListItemIcon>
                             <ListIcon />
                         </ListItemIcon>
                         <ListItemText primary="Languages" />
                     </ListItem>
     
-                    <ListItem button key="Browse" onClick={props.toggleDrawerHandler(false)}>
+                    <ListItem button key="Browse" onClick={props.toggleDrawerHandler(false)} component={Link} to="/">
                         <ListItemIcon>
                             <SearchIcon />
                         </ListItemIcon>

@@ -19,19 +19,19 @@ import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
 import MainActionButton from '../layout/MainActionButton.js'
-import {VisualizeDialog} from './VisualizeWord';
-import {FormDialog} from './FormWord';
+import {VisualizeDialog} from './VisualizeLanguage';
+import {FormDialog} from './FormLanguage';
 import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
 
-import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
+import {deleteLanguageServer, fetchLanguages, selectAllLanguages, setStatus} from './LanguagesSlice';
 
 
 
-function RenderListWord(props) {
-  //Renders the main page of the application and calls the ListWords component
-  const status = useSelector(state => state.words.status);
-  const error = useSelector(state => state.words.error)
+function RenderListLanguage(props) {
+  //Renders the main page of the application and calls the ListLanguages component
+  const status = useSelector(state => state.languages.status);
+  const error = useSelector(state => state.languages.error)
   const dispatch = useDispatch();
   const [openVisualizeDialog, setOpenVisualizeDialog] = useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -48,29 +48,29 @@ function RenderListWord(props) {
     setDrawerOpen(open);
   };
  
-  function handleClickDeleteWord(id){
-    dispatch(deleteWordServer(id));
+  function handleClickDeleteLanguage(id){
+    dispatch(deleteLanguageServer(id));
   }
 
-  function handleOpenVisualizeWord(idWord){
-    setVisualizeId(idWord);
+  function handleOpenVisualizeLanguage(idLanguage){
+    setVisualizeId(idLanguage);
     setOpenVisualizeDialog(true);
   }
 
-  function handleCloseVisualizeWord(){
+  function handleCloseVisualizeLanguage(){
       setOpenVisualizeDialog(false);
   }
 
-  function handleOpenFormWord(idWord){
-    if (typeof(idWord) != 'number') {      
-      // When clicking on Add button, idWord value is "Object object"
-      idWord=0;
+  function handleOpenFormLanguage(idLanguage){
+    if (typeof(idLanguage) != 'number') {      
+      // When clicking on Add button, idLanguage value is "Object object"
+      idLanguage=0;
     }
-    setEditId(idWord);
+    setEditId(idLanguage);
     setOpenFormDialog(true);
   }
 
-  function handleCloseFormWord(){
+  function handleCloseFormLanguage(){
       setOpenFormDialog(false);
   }
 
@@ -82,11 +82,11 @@ function RenderListWord(props) {
   }, [status, dispatch]);
 
   useEffect(() => {
-    //Try to fetch words if failed or not loaded.
+    //Try to fetch languages if failed or not loaded.
     if (status === 'not_loaded' ) {
-        dispatch(fetchWords())
+        dispatch(fetchLanguages())
     }else if(status === 'failed'){
-        setTimeout(()=>dispatch(fetchWords()), 5000);
+        setTimeout(()=>dispatch(fetchLanguages()), 5000);
     }
   }, [status, dispatch])
 
@@ -98,11 +98,11 @@ function RenderListWord(props) {
         setOpenSnackbar(true);
         break;
       case 'saved':
-        setMsg('Word successfully saved');
+        setMsg('Language successfully saved');
         setOpenSnackbar(true);
         break;
       case 'deleted':
-        setMsg('Word successfully deleted');
+        setMsg('Language successfully deleted');
         setOpenSnackbar(true);
         break;
       default:
@@ -119,7 +119,7 @@ function RenderListWord(props) {
             function={(e) => setSearch(e.target.value)}
             handleThemeChange={props.handleThemeChange} 
             darkState={props.darkState}
-            searchMessage="Search Word..."
+            searchMessage="Search Language..."
           />
           <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
 
@@ -130,27 +130,27 @@ function RenderListWord(props) {
               </Typography>
             </Box>
 
-            <ListWords 
-              onClickDeleteWord={handleClickDeleteWord} 
-              setVisualizeId={handleOpenVisualizeWord} 
-              setEditId={handleOpenFormWord} 
+            <ListLanguages 
+              onClickDeleteLanguage={handleClickDeleteLanguage} 
+              setVisualizeId={handleOpenVisualizeLanguage} 
+              setEditId={handleOpenFormLanguage} 
               search={search}
             />
 
             <VisualizeDialog 
                 id={visualizeId} 
                 open={openVisualizeDialog}
-                handleOpen={handleOpenVisualizeWord} 
-                handleClose={handleCloseVisualizeWord} 
+                handleOpen={handleOpenVisualizeLanguage} 
+                handleClose={handleCloseVisualizeLanguage} 
                 title="View"
             />
 
             <FormDialog 
                 id={editId} 
                 open={openFormDialog}
-                handleOpen={handleOpenFormWord} 
-                handleClose={handleCloseFormWord} 
-                title={editId === 0 ? "Add Word" : "Edit Word"}
+                handleOpen={handleOpenFormLanguage} 
+                handleClose={handleCloseFormLanguage} 
+                title={editId === 0 ? "Add Language" : "Edit Language"}
             />
 
             <Backdrop 
@@ -165,11 +165,11 @@ function RenderListWord(props) {
             />
 
             <MainActionButton
-              title="Add Word"
+              title="Add Language"
               ariaLabel="add"
-              onClick={handleOpenFormWord}
-              id="novo_word"
-              name="btn_novo_word"
+              onClick={handleOpenFormLanguage}
+              id="novo_language"
+              name="btn_novo_language"
               icon={<AddIcon />}
             />
           </div>
@@ -177,27 +177,27 @@ function RenderListWord(props) {
   );
 }
 
-function ListWords(props) {
-  //Fetches words, allows user to filter them through SearchBar and maps them in the ItemWord component
-  const words = useSelector(selectAllWords)
-  const status = useSelector(state => state.words.status)
+function ListLanguages(props) {
+  //Fetches languages, allows user to filter them through SearchBar and maps them in the ItemLanguage component
+  const languages = useSelector(selectAllLanguages)
+  const status = useSelector(state => state.languages.status)
   const dispatch = useDispatch()
 
-  const [filteredWords, setFilteredWords] = useState([]);
+  const [filteredLanguages, setFilteredLanguages] = useState([]);
 
   useEffect(() => {
-    //Filter word title that starts with user input
-    setFilteredWords(
-      words.filter((word) =>
-        word.word_title.toLowerCase().startsWith(props.search.toLowerCase())
+    //Filter language title that starts with user input
+    setFilteredLanguages(
+      languages.filter((language) =>
+        language.language_title.toLowerCase().startsWith(props.search.toLowerCase())
       )
     );
-  }, [props.search, words]);
+  }, [props.search, languages]);
 
   useEffect(() => {
     //Try to fetch if not loaded
     if (status === 'not_loaded') {
-        dispatch(fetchWords())
+        dispatch(fetchLanguages())
     } 
   }, [status, dispatch])
 
@@ -206,12 +206,16 @@ function ListWords(props) {
       return(
           <Box justifyContent="flex-start">
 
+          {/*<SearchBar
+            function={(e) => setSearch(e.target.value)}
+          />*/}
+
           <List>
-            {filteredWords.map((word) =>
-            <ItemWord 
-              key={word.id} 
-              word={word} 
-              onClickDeleteWord={props.onClickDeleteWord}
+            {filteredLanguages.map((language) =>
+            <ItemLanguage 
+              key={language.id} 
+              language={language} 
+              onClickDeleteLanguage={props.onClickDeleteLanguage}
               setVisualizeId={props.setVisualizeId}
               setEditId={props.setEditId}
             />)}                      
@@ -220,18 +224,18 @@ function ListWords(props) {
       );
       case 'loading':   
       return (
-        <List id="words">
+        <List id="languages">
             <Divider />
             {/* This will show 5 Skeleton lines while loading content*/}
-            {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)}
+            {[1,2,3,4,5].map((item) => <ItemLanguage loading key={item} />)}
         </List>
         );         
       case 'failed':
       default:
         return(
           <div>
-            <List id="words">
-                {[1,2,3,4,5].map((item) => <ItemWord loading key={item} />)}
+            <List id="languages">
+                {[1,2,3,4,5].map((item) => <ItemLanguage loading key={item} />)}
             </List>
           </div>  
         ) 
@@ -239,8 +243,8 @@ function ListWords(props) {
 
 }
 
-function ItemWord(props) {
-  //Renders word title and buttons in a ListItem component
+function ItemLanguage(props) {
+  //Renders language title and buttons in a ListItem component
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -261,7 +265,7 @@ function ItemWord(props) {
     divider: true,
     button: true,
     id: props.key,
-    onClick: () => props.setVisualizeId(props.word.id)
+    onClick: () => props.setVisualizeId(props.language.id)
   };
 
   return( 
@@ -272,7 +276,7 @@ function ItemWord(props) {
         </ListItemText>
       :   
         <ListItemText
-            primary={props.word.word_title}
+            primary={props.language.language_title}
         />
       }
 
@@ -309,17 +313,17 @@ function ItemWord(props) {
               onClose={handleCloseMenu}
             >
 
-              <MenuItem onClick={()=> {handleCloseMenu();props.setEditId(props.word.id)}}>       
+              <MenuItem onClick={()=> {handleCloseMenu();props.setEditId(props.language.id)}}>       
                 Edit
               </MenuItem>
 
               <MenuItem onClick={handleCloseMenu}>
                 <DeleteButton
-                  id="deleta_word" 
-                  name="excluir_word"
-                  msg="You're about to delete this word." 
-                  function={props.onClickDeleteWord} 
-                  parameter={props.word.id}
+                  id="deleta_language" 
+                  name="excluir_language"
+                  msg="You're about to delete this language." 
+                  function={props.onClickDeleteLanguage} 
+                  parameter={props.language.id}
                 />
               </MenuItem>
             </Menu>
@@ -329,4 +333,4 @@ function ItemWord(props) {
   );
 }
 
-export default RenderListWord
+export default RenderListLanguage

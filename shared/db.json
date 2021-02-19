@@ -35,6 +35,44 @@
         "Noun"
       ],
       "id": 4
+    },
+    {
+      "word_title": "Beschwerde",
+      "word_description": "To complain",
+      "word_examples": "",
+      "word_language": "German",
+      "word_type": [
+        "Verb"
+      ],
+      "id": 5
+    },
+    {
+      "word_title": "Pferde",
+      "word_description": "Horse",
+      "word_examples": "Das Pferd und der Hund.",
+      "word_language": "German",
+      "word_type": [
+        "Noun"
+      ],
+      "id": 6
+    }
+  ],
+  "languages": [
+    {
+      "language_title": "German",
+      "id": 1
+    },
+    {
+      "language_title": "English",
+      "id": 2
+    },
+    {
+      "language_title": "French",
+      "id": 3
+    },
+    {
+      "language_title": "Portuguese",
+      "id": 4
     }
   ]
 }
