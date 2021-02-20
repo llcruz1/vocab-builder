@@ -14,5 +14,6 @@ export let languageSchema = object().shape(
     {
         id: string(),
         language_title: string().required().max(150),
+        language_code: string(),
     }
 )

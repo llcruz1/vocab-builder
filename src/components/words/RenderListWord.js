@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import List from '@material-ui/core/List';
-//import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
 import Skeleton from '@material-ui/lab/Skeleton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -21,12 +21,12 @@ import Select from '@material-ui/core/Select';
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
-//import MainActionButton from '../layout/MainActionButton.js'
+import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
 import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
-import OpenIconSpeedDial from '../layout/SpeedDial';
+//import OpenIconSpeedDial from '../layout/SpeedDial';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
 import {fetchLanguages, selectAllLanguages,} from '../languages/LanguagesSlice';
@@ -191,18 +191,18 @@ function RenderListWord(props) {
             setOpenSnackbar={setOpenSnackbar} 
           />
 
-          <OpenIconSpeedDial
+          {/*<OpenIconSpeedDial
             addWord={handleOpenFormWord}
-          />
+          />*/}
 
-          {/*<MainActionButton
+          <MainActionButton
             title="Add Word"
             ariaLabel="add"
             onClick={handleOpenFormWord}
             id="novo_word"
             name="btn_novo_word"
             icon={<AddIcon />}
-          />*/}
+          />
         </>
   );
 }

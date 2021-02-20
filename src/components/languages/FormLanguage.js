@@ -14,11 +14,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import DoneIcon from '@material-ui/icons/Done';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import {addLanguageServer, updateLanguageServer, selectLanguagesById} from './LanguagesSlice'
 import {languageSchema} from './LanguageSchema';
 import MainActionButton from '../layout/MainActionButton.js'
 import PageDialog from '../layout/PageDialog';
+import availableLanguages from './availableLanguages';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -157,26 +159,47 @@ function FormLanguage(props) {
                 <h1> {/*{languageOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}*/} </h1>
 
                 <Grid className={classes.root}>
+                
                 <form 
                     className={classes.form} 
                     onSubmit={handleSubmit(onSubmit)} 
                     onChange={()=>{props.setFormChange(true)}}  
                     noValidate autoComplete="off" 
                 >
-                    <TextField 
-                        className={classes.formFields}
-                        id="language_title" 
-                        label="Language" 
-                        name="language_title" 
-                        defaultValue={languageOnLoad.language_title} 
-                        inputRef={register}
-                        helperText={errors.language_title?.message} 
-                        error={errors.language_title?.message ? true: false}
-                        InputLabelProps={{ shrink: true }}
-                        variant="outlined"
-                        size="small"
-                        color="secondary"
-                        required
+                    <Autocomplete
+                        id="language-select"
+                        style={{ width: 300 }}
+                        options={availableLanguages}
+                        getOptionSelected={(option) => option.name === languageOnLoad.language_title}
+                        defaultValue={{code: languageOnLoad.language_code, name: languageOnLoad.language_title}}
+                        classes={{
+                            option: classes.option,
+                        }}
+                        autoHighlight
+                        getOptionLabel={(option) => option.name}
+                        renderOption={(option) => (
+                            <React.Fragment>   
+                               {option.name}
+                            </React.Fragment>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                            {...params}
+                            name="language_title" 
+                            error={errors.language_title?.message ? true: false}
+                            inputRef={register} 
+                            label="Choose a language"
+                            defaultValue={languageOnLoad.language_title}
+                            variant="outlined"
+                            size="small"
+                            color="secondary"
+                            required
+                            inputProps={{
+                                ...params.inputProps,
+                                autoComplete: 'new-password', // disable autocomplete and autofill
+                            }}
+                            />
+                        )}
                     />
 
                     <MainActionButton
@@ -196,3 +219,6 @@ function FormLanguage(props) {
 }
 
 export {FormLanguage, FormDialog}
+
+
+
