@@ -22,7 +22,6 @@ import DoneIcon from '@material-ui/icons/Done';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
@@ -146,7 +145,7 @@ function FormWord(props) {
 
     useEffect(() => {
         dispatch(fetchLanguages(languages))
-    }, [])
+    }, [dispatch,languages])
 
     let { id } = useParams();
     id = props.id ? props.id : id;
@@ -198,6 +197,7 @@ function FormWord(props) {
                         className={classes.formControl}
                         error={Boolean(errors.word_language)}
                         size="small"
+                        
                     > 
                     
                         <InputLabel shrink>Language</InputLabel>

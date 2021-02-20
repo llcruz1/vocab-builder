@@ -13,7 +13,7 @@ const mindate = "1900-01-01T00:00:00.000Z"
 export let wordSchema = object().shape(
     {
         id: string(),
-        word_language: string(),
+        word_language: string().required(),
         word_title: string().required().max(150),
         word_description: string().max(1000),
         word_examples: string().max(1000),

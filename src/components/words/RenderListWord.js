@@ -23,9 +23,11 @@ import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
 import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
+import OpenIconSpeedDial from '../layout/SpeedDial';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
-
+import {fetchLanguages, selectAllLanguages,} from '../languages/LanguagesSlice';
+import { TextField } from '@material-ui/core';
 
 
 function RenderListWord(props) {
@@ -40,6 +42,7 @@ function RenderListWord(props) {
   const [msg, setMsg] = useState(props.msg);
   const [openSnackbar, setOpenSnackbar] = useState(props.open);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const toggleDrawerHandler = (open) => (event) => {
     if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
@@ -110,10 +113,8 @@ function RenderListWord(props) {
     }
   }, [status, error]);
 
-  const [search, setSearch] = useState("");
-
-  return( <>
-
+  return( 
+        <>
           <AppBar 
             toggleDrawerHandler={toggleDrawerHandler}
             function={(e) => setSearch(e.target.value)}
@@ -123,67 +124,85 @@ function RenderListWord(props) {
           />
           <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
 
-          <div style={{ width: '100%' }}>
-            <Box m={1} display="flex" justifyContent="flex-start" >
-              <Typography variant="h4">
-                
-              </Typography>
-            </Box>
+          <ListWords 
+            onClickDeleteWord={handleClickDeleteWord} 
+            setVisualizeId={handleOpenVisualizeWord} 
+            setEditId={handleOpenFormWord} 
+            search={search}
+          />
 
-            <ListWords 
-              onClickDeleteWord={handleClickDeleteWord} 
-              setVisualizeId={handleOpenVisualizeWord} 
-              setEditId={handleOpenFormWord} 
-              search={search}
-            />
+          <VisualizeDialog 
+              id={visualizeId} 
+              open={openVisualizeDialog}
+              handleOpen={handleOpenVisualizeWord} 
+              handleClose={handleCloseVisualizeWord} 
+              title="View"
+          />
 
-            <VisualizeDialog 
-                id={visualizeId} 
-                open={openVisualizeDialog}
-                handleOpen={handleOpenVisualizeWord} 
-                handleClose={handleCloseVisualizeWord} 
-                title="View"
-            />
+          <FormDialog 
+              id={editId} 
+              open={openFormDialog}
+              handleOpen={handleOpenFormWord} 
+              handleClose={handleCloseFormWord} 
+              title={editId === 0 ? "Add Word" : "Edit Word"}
+          />
 
-            <FormDialog 
-                id={editId} 
-                open={openFormDialog}
-                handleOpen={handleOpenFormWord} 
-                handleClose={handleCloseFormWord} 
-                title={editId === 0 ? "Add Word" : "Edit Word"}
-            />
+          <Backdrop 
+            open={status === 'saving' || status === 'deleting'}
+          />
 
-            <Backdrop 
-              open={status === 'saving' || status === 'deleting'}
-            />
+          <Snackbar
+            msg={msg} 
+            openSnackbar={openSnackbar}  
+            setMsg={setMsg} 
+            setOpenSnackbar={setOpenSnackbar} 
+          />
 
-            <Snackbar
-              msg={msg} 
-              openSnackbar={openSnackbar}  
-              setMsg={setMsg} 
-              setOpenSnackbar={setOpenSnackbar} 
-            />
+          <OpenIconSpeedDial
+            addWord={handleOpenFormWord}
+          />
 
-            <MainActionButton
-              title="Add Word"
-              ariaLabel="add"
-              onClick={handleOpenFormWord}
-              id="novo_word"
-              name="btn_novo_word"
-              icon={<AddIcon />}
-            />
-          </div>
-          </>
+          {/*<MainActionButton
+            title="Add Word"
+            ariaLabel="add"
+            onClick={handleOpenFormWord}
+            id="novo_word"
+            name="btn_novo_word"
+            icon={<AddIcon />}
+          />*/}
+        </>
   );
 }
 
 function ListWords(props) {
   //Fetches words, allows user to filter them through SearchBar and maps them in the ItemWord component
   const words = useSelector(selectAllWords)
+  const languages = useSelector(selectAllLanguages)
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
 
   const [filteredWords, setFilteredWords] = useState([]);
+  const [filteredLanguage, setFilteredLanguage] = useState();
+
+  useEffect(() => {
+  //Fetch languages
+    dispatch(fetchLanguages(languages))
+  }, [dispatch,languages])
+
+
+  useEffect(() => {
+    //Filter words by language filter
+    if(filteredLanguage===''){
+      setFilteredWords(words)
+    }
+    else{
+      setFilteredWords(
+        words.filter((word) =>
+          word.word_language===filteredLanguage
+        )
+      )
+    }
+  }, [filteredLanguage, words]);
 
   useEffect(() => {
     //Filter word title that starts with user input
@@ -204,8 +223,46 @@ function ListWords(props) {
   switch(status){
     case 'loaded': case 'saved': case 'deleting': case 'saving':
       return(
-          <Box justifyContent="flex-start">
+          <>
+          <Box m={1} display="flex" justifyContent="flex-end">
+            <Typography variant="h8">
+                {"Language: "} 
+            </Typography>
+            &nbsp;
+            <TextField
+              id="filter-language"
+              select
+              isClearable={true}
+              style = {{width: 150}}
+              size="small"
+              value={filteredLanguage}
+              onChange={(e)=>setFilteredLanguage(e.target.value)}
+            >
+              <MenuItem value={''}>All</MenuItem>
+              {languages.map((language) => (
+                <MenuItem key={language.language_title} value={language.language_title}>
+                    {language.language_title}
+                </MenuItem>
+              ))}
+            </TextField>
+            &nbsp;
+            <Typography variant="h8">
+                {"Filter: "} 
+            </Typography>
+            &nbsp;
+            <TextField
+              id="filter"
+              select
+              style = {{width: 100}}
+              size="small"
+              //value={currency}
+              //onChange={handleChange}
+            />
+            </Box>
 
+            <Divider/>
+
+        <Box justifyContent="flex-start">
           <List>
             {filteredWords.map((word) =>
             <ItemWord 
@@ -216,7 +273,8 @@ function ListWords(props) {
               setEditId={props.setEditId}
             />)}                      
           </List>
-          </Box>
+        </Box>
+      </>
       );
       case 'loading':   
       return (

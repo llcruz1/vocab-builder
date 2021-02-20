@@ -4,6 +4,7 @@
       "word_title": "Hund",
       "word_description": "Dog",
       "word_examples": "Ein Hund",
+      "word_language": "German",
       "word_type": [
         "Noun"
       ],
@@ -13,6 +14,7 @@
       "word_title": "Hähnchen",
       "word_description": "Chicken",
       "word_examples": "Unsere Hähnchen-Rezepte holen das beste aus dem zarten Fleisch heraus. ",
+      "word_language": "German",
       "word_type": [
         "Noun"
       ],
@@ -22,6 +24,7 @@
       "word_title": "Katze",
       "word_description": "Cat",
       "word_examples": "Eine Katze und ein Hund.",
+      "word_language": "German",
       "word_type": [
         "Noun"
       ],
@@ -31,6 +34,7 @@
       "word_title": "Vogel",
       "word_description": "Bird",
       "word_examples": "Einige Vögel als Schwarm fliegend in der Luft",
+      "word_language": "German",
       "word_type": [
         "Noun"
       ],
@@ -55,6 +59,14 @@
         "Noun"
       ],
       "id": 6
+    },
+    {
+      "word_title": "Merci",
+      "word_description": "",
+      "word_examples": "",
+      "word_language": "French",
+      "word_type": [],
+      "id": 7
     }
   ],
   "languages": [

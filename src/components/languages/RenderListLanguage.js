@@ -23,6 +23,7 @@ import {VisualizeDialog} from './VisualizeLanguage';
 import {FormDialog} from './FormLanguage';
 import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
+import OpenIconSpeedDial from '../layout/SpeedDial';
 
 import {deleteLanguageServer, fetchLanguages, selectAllLanguages, setStatus} from './LanguagesSlice';
 
@@ -164,14 +165,18 @@ function RenderListLanguage(props) {
               setOpenSnackbar={setOpenSnackbar} 
             />
 
-            <MainActionButton
+            <OpenIconSpeedDial
+              addLanguage={handleOpenFormLanguage}
+            />
+
+            {/*<MainActionButton
               title="Add Language"
               ariaLabel="add"
               onClick={handleOpenFormLanguage}
               id="novo_language"
               name="btn_novo_language"
               icon={<AddIcon />}
-            />
+            />*/}
           </div>
           </>
   );
