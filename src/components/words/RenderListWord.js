@@ -7,18 +7,21 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import List from '@material-ui/core/List';
-import AddIcon from '@material-ui/icons/Add';
+//import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
 import Skeleton from '@material-ui/lab/Skeleton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
-import MainActionButton from '../layout/MainActionButton.js'
+//import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
 import AppBar from '../layout/AppBar';
@@ -27,7 +30,6 @@ import OpenIconSpeedDial from '../layout/SpeedDial';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
 import {fetchLanguages, selectAllLanguages,} from '../languages/LanguagesSlice';
-import { TextField } from '@material-ui/core';
 
 
 function RenderListWord(props) {
@@ -43,6 +45,8 @@ function RenderListWord(props) {
   const [openSnackbar, setOpenSnackbar] = useState(props.open);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const languages = useSelector(selectAllLanguages)
+  const [filteredLanguage, setFilteredLanguage] = useState("");
 
   const toggleDrawerHandler = (open) => (event) => {
     if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
@@ -77,19 +81,23 @@ function RenderListWord(props) {
       setOpenFormDialog(false);
   }
 
+  function handleFilteredLanguage(event) { 
+    setFilteredLanguage(event.target.value);
+  };
+
+  useEffect(() => {
+    dispatch(fetchLanguages(languages))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     //Change state from saved or deleted to loaded, then renders List
     if (status === 'saved' || status === 'deleted'){
         dispatch(setStatus('loaded'));
-    }
-  }, [status, dispatch]);
-
-  useEffect(() => {
-    //Try to fetch words if failed or not loaded.
-    if (status === 'not_loaded' ) {
+    }else if (status === 'not_loaded' ) {
         dispatch(fetchWords())
     }else if(status === 'failed'){
-        setTimeout(()=>dispatch(fetchWords()), 5000);
+        setTimeout(()=>dispatch(fetchWords()), 20000);
     }
   }, [status, dispatch])
 
@@ -113,6 +121,7 @@ function RenderListWord(props) {
     }
   }, [status, error]);
 
+  
   return( 
         <>
           <AppBar 
@@ -124,11 +133,35 @@ function RenderListWord(props) {
           />
           <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
 
+          <Box m={1} display="flex" justifyContent="flex-start">
+            &nbsp;
+            <FormControl>
+              <InputLabel>Language</InputLabel>
+              <Select              
+                id="filter-language"
+                style = {{width: 150}}
+                color="secondary"
+                value={filteredLanguage}
+                onChange={handleFilteredLanguage}
+              >
+                <MenuItem value={'All'}>All</MenuItem>
+                {languages.map((language) => (
+                  <MenuItem key={language.language_title} value={language.language_title}>
+                    {language.language_title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Divider/>
+
           <ListWords 
             onClickDeleteWord={handleClickDeleteWord} 
             setVisualizeId={handleOpenVisualizeWord} 
             setEditId={handleOpenFormWord} 
             search={search}
+            filteredLanguage={filteredLanguage}
           />
 
           <VisualizeDialog 
@@ -177,32 +210,23 @@ function RenderListWord(props) {
 function ListWords(props) {
   //Fetches words, allows user to filter them through SearchBar and maps them in the ItemWord component
   const words = useSelector(selectAllWords)
-  const languages = useSelector(selectAllLanguages)
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
-
   const [filteredWords, setFilteredWords] = useState([]);
-  const [filteredLanguage, setFilteredLanguage] = useState();
-
-  useEffect(() => {
-  //Fetch languages
-    dispatch(fetchLanguages(languages))
-  }, [dispatch,languages])
-
 
   useEffect(() => {
     //Filter words by language filter
-    if(filteredLanguage===''){
+    if(props.filteredLanguage==='All'){
       setFilteredWords(words)
     }
     else{
       setFilteredWords(
         words.filter((word) =>
-          word.word_language===filteredLanguage
+          word.word_language === props.filteredLanguage
         )
       )
     }
-  }, [filteredLanguage, words]);
+  }, [props.filteredLanguage, words]);
 
   useEffect(() => {
     //Filter word title that starts with user input
@@ -223,45 +247,7 @@ function ListWords(props) {
   switch(status){
     case 'loaded': case 'saved': case 'deleting': case 'saving':
       return(
-          <>
-          <Box m={1} display="flex" justifyContent="flex-end">
-            <Typography variant="h8">
-                {"Language: "} 
-            </Typography>
-            &nbsp;
-            <TextField
-              id="filter-language"
-              select
-              isClearable={true}
-              style = {{width: 150}}
-              size="small"
-              value={filteredLanguage}
-              onChange={(e)=>setFilteredLanguage(e.target.value)}
-            >
-              <MenuItem value={''}>All</MenuItem>
-              {languages.map((language) => (
-                <MenuItem key={language.language_title} value={language.language_title}>
-                    {language.language_title}
-                </MenuItem>
-              ))}
-            </TextField>
-            &nbsp;
-            <Typography variant="h8">
-                {"Filter: "} 
-            </Typography>
-            &nbsp;
-            <TextField
-              id="filter"
-              select
-              style = {{width: 100}}
-              size="small"
-              //value={currency}
-              //onChange={handleChange}
-            />
-            </Box>
-
-            <Divider/>
-
+        <>
         <Box justifyContent="flex-start">
           <List>
             {filteredWords.map((word) =>

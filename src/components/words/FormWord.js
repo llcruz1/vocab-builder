@@ -199,7 +199,6 @@ function FormWord(props) {
                         size="small"
                         
                     > 
-                    
                         <InputLabel shrink>Language</InputLabel>
 
                         <Controller
@@ -212,12 +211,13 @@ function FormWord(props) {
                                 ))}
                             </Select>
                         }
-                        id="word_language"
-                        style = {{width: 200}}
-                        InputLabelProps={{ shrink: true }}
-                        name="word_language" 
-                        control={control}
-                        defaultValue={wordOnLoad.id == null ? '' : wordOnLoad.word_language}
+                            id="word_language"
+                            style = {{width: 200}}
+                            color="secondary"
+                            InputLabelProps={{ shrink: true }}
+                            name="word_language" 
+                            control={control}
+                            defaultValue={wordOnLoad.id == null ? '' : wordOnLoad.word_language}
                         />
                         <FormHelperText>
                         {errors.word_language?.message}
