@@ -13,7 +13,6 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-//import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
@@ -26,7 +25,6 @@ import {VisualizeDialog} from './VisualizeWord';
 import {FormDialog} from './FormWord';
 import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
-//import OpenIconSpeedDial from '../layout/SpeedDial';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
 import {fetchLanguages, selectAllLanguages,} from '../languages/LanguagesSlice';
@@ -190,10 +188,6 @@ function RenderListWord(props) {
             setMsg={setMsg} 
             setOpenSnackbar={setOpenSnackbar} 
           />
-
-          {/*<OpenIconSpeedDial
-            addWord={handleOpenFormWord}
-          />*/}
 
           <MainActionButton
             title="Add Word"

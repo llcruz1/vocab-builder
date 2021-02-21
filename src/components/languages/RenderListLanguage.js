@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import List from '@material-ui/core/List';
-//import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
 import Skeleton from '@material-ui/lab/Skeleton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,16 +18,13 @@ import Typography from '@material-ui/core/Typography';
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
 import DeleteButton from '../layout/DeleteButton.js'
-//import MainActionButton from '../layout/MainActionButton.js'
+import MainActionButton from '../layout/MainActionButton.js'
 import {VisualizeDialog} from './VisualizeLanguage';
 import {FormDialog} from './FormLanguage';
 import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
-import OpenIconSpeedDial from '../layout/SpeedDial';
 
 import {deleteLanguageServer, fetchLanguages, selectAllLanguages, setStatus} from './LanguagesSlice';
-
-
 
 function RenderListLanguage(props) {
   //Renders the main page of the application and calls the ListLanguages component
@@ -72,13 +69,13 @@ function RenderListLanguage(props) {
   }
 
   function handleCloseFormLanguage(){
-      setOpenFormDialog(false);
+    setOpenFormDialog(false);
   }
 
   useEffect(() => {
     //Change state from saved or deleted to loaded, then renders List
     if (status === 'saved' || status === 'deleted'){
-        dispatch(setStatus('loaded'));
+      dispatch(setStatus('loaded'));
     }
   }, [status, dispatch]);
 
@@ -165,18 +162,14 @@ function RenderListLanguage(props) {
               setOpenSnackbar={setOpenSnackbar} 
             />
 
-            <OpenIconSpeedDial
-              addLanguage={handleOpenFormLanguage}
-            />
-
-            {/*<MainActionButton
+            <MainActionButton
               title="Add Language"
               ariaLabel="add"
               onClick={handleOpenFormLanguage}
               id="novo_language"
               name="btn_novo_language"
               icon={<AddIcon />}
-            />*/}
+            />
           </div>
           </>
   );
@@ -278,10 +271,12 @@ function ItemLanguage(props) {
       {props.loading ?
         <ListItemText>
           <Skeleton variant="text" width={100} />
+          <Skeleton variant="text" width={40} />
         </ListItemText>
       :   
         <ListItemText
             primary={props.language.language_title}
+            secondary={"n words"}
         />
       }
 

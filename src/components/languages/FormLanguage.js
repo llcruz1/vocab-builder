@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import React, {useState} from 'react';
 import {useParams, useHistory } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
@@ -161,45 +162,44 @@ function FormLanguage(props) {
                 <Grid className={classes.root}>
                 
                 <form 
-                    className={classes.form} 
-                    onSubmit={handleSubmit(onSubmit)} 
-                    onChange={()=>{props.setFormChange(true)}}  
-                    noValidate autoComplete="off" 
+                 className={classes.form} 
+                 onSubmit={handleSubmit(onSubmit)} 
+                 onChange={()=>{props.setFormChange(true)}}  
+                 noValidate autoComplete="off" 
                 >
                     <Autocomplete
-                        id="language-select"
-                        style={{ width: 300 }}
-                        options={availableLanguages}
-                        getOptionSelected={(option) => option.name === languageOnLoad.language_title}
-                        defaultValue={{code: languageOnLoad.language_code, name: languageOnLoad.language_title}}
-                        classes={{
-                            option: classes.option,
-                        }}
-                        autoHighlight
-                        getOptionLabel={(option) => option.name}
-                        renderOption={(option) => (
-                            <React.Fragment>   
-                               {option.name}
-                            </React.Fragment>
-                        )}
-                        renderInput={(params) => (
-                            <TextField
-                            {...params}
-                            name="language_title" 
-                            error={errors.language_title?.message ? true: false}
-                            inputRef={register} 
-                            label="Choose a language"
-                            defaultValue={languageOnLoad.language_title}
-                            variant="outlined"
-                            size="small"
-                            color="secondary"
-                            required
-                            inputProps={{
-                                ...params.inputProps,
-                                autoComplete: 'new-password', // disable autocomplete and autofill
-                            }}
-                            />
-                        )}
+                     id="language-select"
+                     style={{ width: 300 }}
+                     options={availableLanguages}
+                     defaultValue={languageOnLoad.language_title}
+                     classes={{
+                        option: classes.option,
+                     }}
+                     getOptionLabel={(option) => option}
+                     autoHighlight
+                     renderOption={(option) => (
+                        <React.Fragment>   
+                         {option}
+                        </React.Fragment>
+                     )}
+                     renderInput={(params) => (
+                      <TextField
+                       {...params}
+                       name="language_title" 
+                       error={errors.language_title?.message ? true: false}
+                       inputRef={register} 
+                       label="Choose a language"
+                       defaultValue={languageOnLoad.language_title}
+                       variant="outlined"
+                       size="small"
+                       color="secondary"
+                       required
+                       inputProps={{
+                        ...params.inputProps,
+                        autoComplete: 'new-password', // disable autocomplete and autofill
+                       }}
+                      />
+                     )}
                     />
 
                     <MainActionButton
