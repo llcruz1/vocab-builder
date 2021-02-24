@@ -25,6 +25,13 @@ import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
 
 import {deleteLanguageServer, fetchLanguages, selectAllLanguages, setStatus} from './LanguagesSlice';
+import {fetchWords, selectAllWords} from '../words/WordsSlice';
+
+function countWords(words, language) {
+  const numberOfWords = words.filter(word => word.word_language === language).length;
+
+  return numberOfWords;
+}
 
 function RenderListLanguage(props) {
   //Renders the main page of the application and calls the ListLanguages component
@@ -38,7 +45,11 @@ function RenderListLanguage(props) {
   const [msg, setMsg] = useState(props.msg);
   const [openSnackbar, setOpenSnackbar] = useState(props.open);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const words = useSelector(selectAllWords)
+  const statusWords = useSelector(state => state.words.status);
 
+  
   const toggleDrawerHandler = (open) => (event) => {
     if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
         return;
@@ -108,7 +119,13 @@ function RenderListLanguage(props) {
     }
   }, [status, error]);
 
-  const [search, setSearch] = useState("");
+  useEffect(() => {
+    //Try to fetch if not loaded
+    if (statusWords === 'not_loaded') {
+        dispatch(fetchWords())
+    } 
+  }, [statusWords, dispatch])
+
 
   return( <>
 
@@ -133,6 +150,7 @@ function RenderListLanguage(props) {
               setVisualizeId={handleOpenVisualizeLanguage} 
               setEditId={handleOpenFormLanguage} 
               search={search}
+              words={words}
             />
 
             <VisualizeDialog 
@@ -203,21 +221,17 @@ function ListLanguages(props) {
     case 'loaded': case 'saved': case 'deleting': case 'saving':
       return(
           <Box justifyContent="flex-start">
-
-          {/*<SearchBar
-            function={(e) => setSearch(e.target.value)}
-          />*/}
-
-          <List>
-            {filteredLanguages.map((language) =>
-            <ItemLanguage 
-              key={language.id} 
-              language={language} 
-              onClickDeleteLanguage={props.onClickDeleteLanguage}
-              setVisualizeId={props.setVisualizeId}
-              setEditId={props.setEditId}
-            />)}                      
-          </List>
+            <List>
+              {filteredLanguages.map((language) =>
+                <ItemLanguage 
+                  key={language.id} 
+                  language={language} 
+                  onClickDeleteLanguage={props.onClickDeleteLanguage}
+                  setVisualizeId={props.setVisualizeId}
+                  setEditId={props.setEditId}
+                  words={props.words}
+                />)}                      
+            </List>
           </Box>
       );
       case 'loading':   
@@ -238,7 +252,6 @@ function ListLanguages(props) {
           </div>  
         ) 
   }  
-
 }
 
 function ItemLanguage(props) {
@@ -276,7 +289,14 @@ function ItemLanguage(props) {
       :   
         <ListItemText
             primary={props.language.language_title}
-            secondary={"n words"}
+            secondary={ 
+                 countWords(props.words, props.language.language_title)===1
+              ? 
+                `${countWords(props.words, props.language.language_title)} word`
+              :
+                `${countWords(props.words, props.language.language_title)} words`
+            }
+              
         />
       }
 

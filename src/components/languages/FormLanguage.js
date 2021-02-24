@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             margin: theme.spacing(1),
             },
-        textAlign: 'center'
+        textAlign: 'center',
     },
  
   form: {
@@ -159,60 +159,59 @@ function FormLanguage(props) {
     return( <>  
                 <h1> {/*{languageOnLoad.id == null ? "New Vocabulary" : "Edit Vocabulary"}*/} </h1>
 
-                <Grid className={classes.root}>
-                
-                <form 
-                 className={classes.form} 
-                 onSubmit={handleSubmit(onSubmit)} 
-                 onChange={()=>{props.setFormChange(true)}}  
-                 noValidate autoComplete="off" 
-                >
-                    <Autocomplete
-                     id="language-select"
-                     style={{ width: 300 }}
-                     options={availableLanguages}
-                     defaultValue={languageOnLoad.language_title}
-                     classes={{
-                        option: classes.option,
-                     }}
-                     getOptionLabel={(option) => option}
-                     autoHighlight
-                     renderOption={(option) => (
-                        <React.Fragment>   
-                         {option}
-                        </React.Fragment>
-                     )}
-                     renderInput={(params) => (
-                      <TextField
-                       {...params}
-                       name="language_title" 
-                       error={errors.language_title?.message ? true: false}
-                       inputRef={register} 
-                       label="Choose a language"
-                       defaultValue={languageOnLoad.language_title}
-                       variant="outlined"
-                       size="small"
-                       color="secondary"
-                       required
-                       inputProps={{
-                        ...params.inputProps,
-                        autoComplete: 'new-password', // disable autocomplete and autofill
-                       }}
-                      />
-                     )}
-                    />
+                <Grid className={classes.root}>          
+                    <form 
+                        className={classes.form} 
+                        onSubmit={handleSubmit(onSubmit)} 
+                        onChange={()=>{props.setFormChange(true)}}  
+                        noValidate autoComplete="off" 
+                    >
+                        <Autocomplete
+                            id="language-select"
+                            style={{ width: 300 }}
+                            className={classes.formFields}
+                            options={availableLanguages}
+                            defaultValue={languageOnLoad.language_title}
+                            classes={{
+                                option: classes.option,
+                            }}
+                            getOptionLabel={(option) => option}
+                            autoHighlight
+                            renderOption={(option) => (
+                                <React.Fragment>   
+                                {option}
+                                </React.Fragment>
+                            )}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    name="language_title" 
+                                    error={errors.language_title?.message ? true: false}
+                                    inputRef={register} 
+                                    label="Choose a language"
+                                    defaultValue={languageOnLoad.language_title}
+                                    variant="outlined"
+                                    size="small"
+                                    color="secondary"
+                                    required
+                                    inputProps={{
+                                        ...params.inputProps,
+                                        autoComplete: 'new-password', // disable autocomplete and autofill
+                                    }}
+                                />
+                            )}
+                        />
 
-                    <MainActionButton
-                        type="submit"
-                        title="Save"
-                        ariaLabel="save"
-                        onClick={()=>{props.setFormChange(false)}}
-                        id="salva_language"
-                        name="btn_salvar_language"
-                        icon={<DoneIcon />}
-                    />
-                </form>
- 
+                        <MainActionButton
+                            type="submit"
+                            title="Save"
+                            ariaLabel="save"
+                            onClick={()=>{props.setFormChange(false)}}
+                            id="salva_language"
+                            name="btn_salvar_language"
+                            icon={<DoneIcon />}
+                        />
+                    </form>
                 </Grid>
             </>
         );
