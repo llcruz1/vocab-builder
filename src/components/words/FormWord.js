@@ -19,15 +19,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import DoneIcon from '@material-ui/icons/Done';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Select from '@material-ui/core/Select';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import {addWordServer, updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
-import {selectAllLanguages, fetchLanguages} from '../languages/LanguagesSlice'
 import MainActionButton from '../layout/MainActionButton.js'
 import PageDialog from '../layout/PageDialog';
+import availableLanguages from './availableLanguages';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -142,16 +140,9 @@ function FormWord(props) {
     const dispatch = useDispatch();
     const classes = useStyles(); 
     
-    const languages = useSelector(selectAllLanguages);
-
-    useEffect(() => {
-        dispatch(fetchLanguages(languages))
-    }, [dispatch,languages])
-
     let { id } = useParams();
     id = props.id ? props.id : id;
   
-
     const wordFound = useSelector(state => selectWordsById(state, id))
     const { register, handleSubmit, errors, control } = useForm({
         resolver: yupResolver(wordSchema)
@@ -193,38 +184,45 @@ function FormWord(props) {
                     onChange={()=>{props.setFormChange(true)}}  
                     noValidate autoComplete="off" 
                 >
-
-                    <FormControl 
-                        className={classes.formControl}
-                        error={Boolean(errors.word_language)}
-                        size="small"
-                        
-                    > 
-                        <InputLabel shrink>Language</InputLabel>
-
-                        <Controller
-                        as={
-                            <Select>
-                                {languages.map((option) => (
-                                    <MenuItem key={option.language_title} value={option.language_title}>
-                                        {option.language_title}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        }
-                            id="word_language"
-                            style = {{width: 200}}
-                            color="secondary"
-                            InputLabelProps={{ shrink: true }}
-                            name="word_language" 
-                            control={control}
-                            defaultValue={wordOnLoad.id == null ? '' : wordOnLoad.word_language}
-                        />
-                        <FormHelperText>
-                        {errors.word_language?.message}
-                        </FormHelperText>
+                    <FormControl>
+                    <Autocomplete
+                        id="language-select"
+                        style={{ width: 300 }}
+                        className={classes.formFields}
+                        options={availableLanguages}
+                        defaultValue={wordOnLoad.word_language}
+                        classes={{
+                            option: classes.option,
+                        }}
+                        getOptionLabel={(option) => option}
+                        autoHighlight
+                        renderOption={(option) => (
+                            <React.Fragment>   
+                            {option}
+                            </React.Fragment>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                name="word_language" 
+                                error={errors.word_language?.message ? true: false}
+                                inputRef={register} 
+                                label="Choose a language"
+                                defaultValue={wordOnLoad.word_language}
+                                variant="outlined"
+                                size="small"
+                                color="secondary"
+                                required
+                                inputProps={{
+                                    ...params.inputProps,
+                                    autoComplete: 'new-password', // disable autocomplete and autofill
+                                }}
+                            />
+                        )}
+                    />
                     </FormControl>
                     <br/>
+
                     <TextField 
                         className={classes.formFields}
                         id="word_title" 

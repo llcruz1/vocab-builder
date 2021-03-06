@@ -41,16 +41,6 @@
       "id": 4
     },
     {
-      "word_title": "Beschwerde",
-      "word_description": "To complain",
-      "word_examples": "",
-      "word_language": "German",
-      "word_type": [
-        "Verb"
-      ],
-      "id": 5
-    },
-    {
       "word_title": "Pferde",
       "word_description": "Horse",
       "word_examples": "Das Pferd und der Hund.",
@@ -61,65 +51,45 @@
       "id": 6
     },
     {
-      "word_title": "Merci",
-      "word_description": "",
-      "word_examples": "",
       "word_language": "French",
-      "word_type": [],
+      "word_title": "Chat",
+      "word_description": "Cat",
+      "word_examples": "La fille a un chat",
+      "word_type": [
+        "Noun"
+      ],
       "id": 7
     },
     {
-      "word_title": "Cachorro",
-      "word_description": "",
+      "word_language": "French",
+      "word_title": "Chien",
+      "word_description": "Dog",
       "word_examples": "",
-      "word_language": "Portuguese",
       "word_type": [],
       "id": 8
     },
     {
-      "word_title": "Dog",
+      "word_language": "Portuguese",
+      "word_title": "Papagaio",
       "word_description": "",
       "word_examples": "",
-      "word_language": "English",
       "word_type": [],
       "id": 9
     },
     {
-      "word_title": "Mesa",
+      "word_language": "English",
+      "word_title": "Cow",
       "word_description": "",
       "word_examples": "",
-      "word_language": "Portuguese",
       "word_type": [],
       "id": 10
     },
     {
-      "word_title": "Chat",
-      "word_description": "Cat",
+      "word_language": "English",
+      "word_title": "Bird",
+      "word_description": "",
       "word_examples": "",
-      "word_language": "French",
       "word_type": [],
-      "id": 12
-    }
-  ],
-  "languages": [
-    {
-      "language_title": "German",
-      "id": 1
-    },
-    {
-      "language_title": "English",
-      "id": 2
-    },
-    {
-      "language_title": "French",
-      "id": 3
-    },
-    {
-      "language_title": "Portuguese",
-      "id": 10
-    },
-    {
-      "language_title": "Hebrew",
       "id": 11
     }
   ]

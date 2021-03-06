@@ -27,11 +27,11 @@ import AppBar from '../layout/AppBar';
 import Drawer from '../layout/Drawer';
 
 import {deleteWordServer, fetchWords, selectAllWords, setStatus} from './WordsSlice';
-import {fetchLanguages, selectAllLanguages,} from '../languages/LanguagesSlice';
 
 
 function RenderListWord(props) {
   //Renders the main page of the application and calls the ListWords component
+  const words = useSelector(selectAllWords)
   const status = useSelector(state => state.words.status);
   const error = useSelector(state => state.words.error)
   const dispatch = useDispatch();
@@ -43,8 +43,8 @@ function RenderListWord(props) {
   const [openSnackbar, setOpenSnackbar] = useState(props.open);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const languages = useSelector(selectAllLanguages)
   const [filteredLanguage, setFilteredLanguage] = useState("");
+  const [filteredWords, setFilteredWords] = useState([]);
 
   const toggleDrawerHandler = (open) => (event) => {
     if (event?.type === 'keydown' && (event?.key === 'Tab' || event?.key === 'Shift')) {
@@ -83,10 +83,37 @@ function RenderListWord(props) {
     setFilteredLanguage(event.target.value);
   };
 
+  const unique = (list, key) => {
+    const object = list.reduce((acc, item) => ({
+      ...acc,
+      [item[key]]: true,
+    }), {});
+
+    return Object.keys(object);
+  }
+
   useEffect(() => {
-    dispatch(fetchLanguages(languages))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    //Filter words by language filter
+    if(filteredLanguage==='All'){
+      setFilteredWords(words)
+    }
+    else{
+      setFilteredWords(
+        words.filter((word) =>
+          word.word_language === filteredLanguage
+        )
+      )
+    }
+  }, [filteredLanguage, words]);
+
+  useEffect(() => {
+    //Filter word title that starts with user input
+    setFilteredWords(
+      words.filter((word) =>
+        word.word_title.toLowerCase().startsWith(search.toLowerCase())
+      )
+    );
+  }, [search, words]);
 
   useEffect(() => {
     //Change state from saved or deleted to loaded, then renders List
@@ -119,7 +146,7 @@ function RenderListWord(props) {
     }
   }, [status, error]);
 
-  
+
   return( 
         <>
           <AppBar 
@@ -131,26 +158,32 @@ function RenderListWord(props) {
           />
           <Drawer open={drawerOpen} toggleDrawerHandler={toggleDrawerHandler} />
 
-          <Box m={1} display="flex" justifyContent="flex-start">
-            &nbsp;
-            <FormControl>
-              <InputLabel>Language</InputLabel>
-              <Select              
-                id="filter-language"
-                style = {{width: 150}}
-                color="secondary"
-                value={filteredLanguage}
-                onChange={handleFilteredLanguage}
-              >
-                <MenuItem value={'All'}>All</MenuItem>
-                {languages.map((language) => (
-                  <MenuItem key={language.language_title} value={language.language_title}>
-                    {language.language_title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+          <div style={{ width: '100%' }}>
+            <Box display="flex" alignItems="flex-end">
+              <Box p={1} flexGrow={1}>
+                <FormControl>
+                  <InputLabel>Language</InputLabel>
+                  <Select              
+                    id="filter-language"
+                    style = {{width: 150}}
+                    color="secondary"
+                    value={filteredLanguage}
+                    onChange={handleFilteredLanguage}
+                  >
+                    <MenuItem value={'All'}>All</MenuItem>
+                    {unique(words, "word_language").map((language) => (
+                      <MenuItem key={language} value={language}>
+                        {language}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box p={1} color="grey.500">
+                {filteredWords.length} {filteredWords.length === 1 ? " word" : " words"}
+              </Box>
+            </Box>
+          </div>
 
           <Divider/>
 
@@ -158,7 +191,7 @@ function RenderListWord(props) {
             onClickDeleteWord={handleClickDeleteWord} 
             setVisualizeId={handleOpenVisualizeWord} 
             setEditId={handleOpenFormWord} 
-            search={search}
+            filteredWords = {filteredWords}
             filteredLanguage={filteredLanguage}
           />
 
@@ -203,34 +236,9 @@ function RenderListWord(props) {
 
 function ListWords(props) {
   //Fetches words, allows user to filter them through SearchBar and maps them in the ItemWord component
-  const words = useSelector(selectAllWords)
   const status = useSelector(state => state.words.status)
   const dispatch = useDispatch()
-  const [filteredWords, setFilteredWords] = useState([]);
-
-  useEffect(() => {
-    //Filter words by language filter
-    if(props.filteredLanguage==='All'){
-      setFilteredWords(words)
-    }
-    else{
-      setFilteredWords(
-        words.filter((word) =>
-          word.word_language === props.filteredLanguage
-        )
-      )
-    }
-  }, [props.filteredLanguage, words]);
-
-  useEffect(() => {
-    //Filter word title that starts with user input
-    setFilteredWords(
-      words.filter((word) =>
-        word.word_title.toLowerCase().startsWith(props.search.toLowerCase())
-      )
-    );
-  }, [props.search, words]);
-
+ 
   useEffect(() => {
     //Try to fetch if not loaded
     if (status === 'not_loaded') {
@@ -244,7 +252,7 @@ function ListWords(props) {
         <>
         <Box justifyContent="flex-start">
           <List>
-            {filteredWords.map((word) =>
+            {props.filteredWords.map((word) =>
             <ItemWord 
               key={word.id} 
               word={word} 

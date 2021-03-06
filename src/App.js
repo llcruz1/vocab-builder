@@ -8,13 +8,6 @@ import RenderListWord from './components/words/RenderListWord';
 import {FormWord} from './components/words/FormWord';
 import {VisualizeWord} from './components/words/VisualizeWord';
 
-
-import RenderListLanguage from './components/languages/RenderListLanguage';
-import {FormLanguage} from './components/languages/FormLanguage';
-import {VisualizeLanguage} from './components/languages/VisualizeLanguage';
-
-import {Settings} from './components/settings/settingsPage';
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -61,17 +54,11 @@ const App = (props) => {
                 <Router>   
                       <div>
                         <Switch>
-                          <Route exact path="/languages/novo"><FormLanguage fromMenu={true}/></Route>
-                          <Route exact path="/languages/:id"><FormLanguage fromMenu={true}/></Route>
-                          <Route exact path="/languages/visualize/:id"><VisualizeLanguage/></Route>
-                          <Route exact path="/languages"><RenderListLanguage handleThemeChange={handleThemeChange} darkState={darkState} /></Route>      
-
                           <Route exact path="/"><RenderListWord handleThemeChange={handleThemeChange} darkState={darkState}/></Route>
                           <Route exact path="/words/novo"><FormWord fromMenu={true}/></Route>
                           <Route exact path="/words/:id"><FormWord fromMenu={true}/></Route>
                           <Route exact path="/words/visualize/:id"><VisualizeWord/></Route>
                           <Route exact path="/words"><RenderListWord handleThemeChange={handleThemeChange} darkState={darkState} /></Route>      
-                          <Route exact path="/settings" ><Settings/></Route>     
                         </Switch>
                       </div>
                 </Router>
