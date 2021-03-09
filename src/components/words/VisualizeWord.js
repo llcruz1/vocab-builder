@@ -1,12 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-import {selectWordsById} from './WordsSlice'
+import {updateWordServer, selectWordsById} from './WordsSlice'
 import {wordSchema} from './WordSchema';
 
 import PageDialog from '../layout/PageDialog';
@@ -51,11 +50,26 @@ const useStyles = makeStyles((theme) => ({
     let { id } = useParams();
     id = props.id ? props.id : id;
     id = parseInt(id);
- 
+    const dispatch = useDispatch();
+    
     const wordFound = useSelector(state => selectWordsById(state, id))
 
+    const [word, setWord] = useState(wordFound)
+  
+    useEffect(() => {
+        setWord({
+          ...word,
+          word_reviewed_at: new Date(),
+          word_review_interval: word.word_review_interval + 1
+        })
+    }, [])
+    
+    useEffect(() => {
+      dispatch(updateWordServer({...word, id: id}));
+    }, [word])
+    
     const [wordOnLoad] = useState(
-        id ? wordFound ?? wordSchema.cast({}): wordSchema.cast({}));
+      id ? word ?? wordSchema.cast({}): wordSchema.cast({}));
 
     const classes = useStyles(); 
 

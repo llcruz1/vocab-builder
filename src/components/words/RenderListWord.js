@@ -16,6 +16,9 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import FlagIcon from '@material-ui/icons/Flag';
+import { orange, green, red} from '@material-ui/core/colors';
+import {getStatusWord} from './WordSchema';
 
 import Backdrop from '../layout/Backdrop';
 import Snackbar from '../layout/Snackbar';
@@ -126,7 +129,7 @@ function RenderListWord(props) {
     }
   }, [status, dispatch])
 
-  useEffect(() => {
+useEffect(() => {
     //Display messages on Snackbar accordingly with requests' status
     switch(status){
       case 'failed': 
@@ -285,6 +288,29 @@ function ListWords(props) {
 
 }
 
+function getFlag(status){
+  switch(status){
+      case 'bad':
+          return(
+            <IconButton disabled>
+              <FlagIcon style={{color: red[700]}}/>
+            </IconButton>
+          );
+      case 'alert':
+          return(
+            <IconButton disabled>
+              <FlagIcon style={{color: orange[700]}}/>
+            </IconButton>
+          );
+      case 'ok': default:
+          return(
+            <IconButton disabled>
+              <FlagIcon style={{color: green[700]}}/>
+            </IconButton>
+          );
+  }
+}
+
 function ItemWord(props) {
   //Renders word title and buttons in a ListItem component
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -328,6 +354,8 @@ function ItemWord(props) {
         </ListItemSecondaryAction>
       :
         <ListItemSecondaryAction>
+            {getFlag(getStatusWord(props.word.word_review_interval, props.word.word_reviewed_at))}
+
             <Tooltip title="Show options" aria-label="show options">
               <IconButton
                 aria-label="show menu"

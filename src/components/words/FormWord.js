@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useParams, useHistory } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
