@@ -1,3 +1,7 @@
+Simple app for language learning that I have made while learning React, mainly inspired by AnkiDroid. It uses Redux for state management, Json-server as a mock API and a bunch of Material-UI features like Dark-mode, Snackbars and Dialogs.
+
+![](./docs/vocab-screenshots.png)
+
 # Running the application
 
 Currently, to run the application in development mode you have to run the following scripts in the project directory:
