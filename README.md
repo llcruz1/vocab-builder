@@ -1,4 +1,4 @@
-Simple app for language learning that I have made while learning React, mainly inspired by AnkiDroid. It uses Redux for state management, Json-server as a mock API and a bunch of Material-UI features like Dark-mode, Snackbars and Dialogs.
+Simple app for language learning that I have made while learning React, mainly inspired by AnkiDroid. It uses Redux for state management, Json-server as a mock API and Material-UI for styling.
 
 ![](./docs/vocab-screenshots.png)
 
